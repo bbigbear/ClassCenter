@@ -13,8 +13,8 @@
 			<li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown">选课 <span class="caret"></span></a>
 	          <ul class="dropdown-menu">
-	            <li><a href="/chooseClass">在线选课</a></li>
-	            <li><a href="/queryClass">浏览课程</a></li>
+	            <li><a href="/chooseClass" target="_blank">在线选课</a></li>
+	            <li><a href="/queryClass" target="_blank">浏览课程</a></li>
 	            <li><a href="#">修改选课</a></li>
 	          </ul>
 	        </li>
