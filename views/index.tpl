@@ -38,9 +38,6 @@
 				<i class="layui-icon" style="font-size: 30px;text-align:center;" id="setting">&#xe857;</i>设置 			
 				</div>
 				<ul id="sortable">
-				  <<<range .maps>>>
-				  <li class="ui-state-default" id=<<<.Id>>>><img src="<<<.Path>>>" /><span><<<.Name>>></span></li>
-				  <<<end>>>
 				 <!-- <li class="ui-state-default" id="news"><img src="../static/img/car.png" /><span>新闻管理</span></li>
 				  <li class="ui-state-default" id="recruit_require"><img src="../static/img/car.png" /><span>招聘需求</span></li>
 				  <li class="ui-state-default" id="recruit_approval"><img src="../static/img/car.png" /><span>计划审批</span></li>-->
@@ -125,11 +122,6 @@
 	 // console.log(data.elem); //得到当前的Tab大容器
 	  list.splice(data.index,1);
 	});
-	<<<range .maps>>>
-		$('#'+<<<.Id>>>).on('click',function(){
-			ChangeTabs(<<<.Name>>>)
-		  });
-	<<<end>>>
 		
 	
 	$('#setting').on('click',function(){

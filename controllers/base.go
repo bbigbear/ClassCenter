@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"OrderingSystem/models"
+	"ClassCenter/models"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"

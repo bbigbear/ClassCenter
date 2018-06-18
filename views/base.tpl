@@ -1,6 +1,6 @@
 [[define "base_header"]]
 <div class="layui-header">
-    <div class="layui-logo" style="color:#F0F0F0;font-size:20px;">课程管理中心</div>
+    <div class="layui-logo " style="color:#F0F0F0;font-size:20px;">课程管理中心</div>
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
         <a href="javascript:;">
@@ -20,6 +20,14 @@
 [[define "base_side"]]
 	<div class="layui-side-scroll">
       <ul class="layui-nav layui-nav-tree" lay-filter="test">
+		<li class="layui-nav-item">
+          <a class="" href="javascript:;">教学课程管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">教学课程申请</a></dd>			
+            <dd><a href="javascript:;">教学课程审核</a></dd>			
+            <dd><a href="javascript:;">教学课程维护</a></dd>					
+          </dl>
+        </li>
         <li class="layui-nav-item">
           <a class="" href="javascript:;">排课管理</a>
           <dl class="layui-nav-child">

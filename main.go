@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ClassCenter/models"
 	_ "classCenter/routers"
 	"fmt"
 
@@ -40,5 +41,5 @@ func DBConnection() {
 	orm.RegisterDataBase("default", "mysql", sql, maxIdleConns, maxOpenConns)
 }
 func RegisterModel() {
-	orm.RegisterModel()
+	orm.RegisterModel(new(models.Login))
 }
