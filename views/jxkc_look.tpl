@@ -186,7 +186,7 @@ body{padding: 10px;}
   </div>
   <div class="layui-form-item">
     <div class="layui-input-block">
-      <button class="layui-btn layui-btn-primary" id="save">保存</button>
+<!--      <button class="layui-btn layui-btn-primary" id="add">添加</button>-->
     </div>
   </div>
 </form>
@@ -290,7 +290,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 			}
 	}
 	
-	$('#save').on('click',function(){
+	$('#add').on('click',function(){
 		uploadData()
 		return false;
 	});

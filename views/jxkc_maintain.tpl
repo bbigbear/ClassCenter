@@ -113,6 +113,23 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 			  	return false; 
 			  },
 		});
+	    }else if(layEvent === 'del'){
+	      layer.confirm('真的删除行么', function(index){
+	        var jsData={'id':data.Id}
+			$.post('/v1/jxkc/del', jsData, function (out) {
+                if (out.code == 200) {
+                    layer.alert('删除成功了', {icon: 1},function(index){
+                        layer.close(index);
+                        table.reload({});
+                    });
+                } else {
+                    layer.msg(out.message)
+                }
+            }, "json");
+			obj.del(); //删除对应行（tr）的DOM结构
+	        layer.close(index);
+	        //向服务端发送删除指令
+	      });
 	    }
 	  });
   

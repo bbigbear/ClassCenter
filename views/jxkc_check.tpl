@@ -49,8 +49,11 @@ body{padding: 10px;}
 
 	<table id="list" lay-filter="announcement" style="width:auto;"></table>
 	<script type="text/html" id="barDemo">
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="yes">通过</a>
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="no">驳回</a>
+		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">查看</a>
+		{{#  if(d.Status =="未审核"){ }}
+			<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="yes">通过</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="no">驳回</a>
+		{{# } }}
 	</script>
 <script src="/static/layui.js"></script>
 <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
@@ -106,7 +109,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 				  //time: 2000, //2秒后自动关闭
 				  maxmin: true,
 				  anim: 2,
-				  content: ['/v1/jxkc/edit?id='+data.Id], //iframe的url，no代表不显示滚动条
+				  content: ['/v1/jxkc/look?id='+data.Id], //iframe的url，no代表不显示滚动条
 				  cancel: function(index, layero){			  
 					layer.close(index)
 					window.location.reload();
@@ -115,8 +118,8 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 				});
 	    	}else if(layEvent === 'yes'){
 				layer.confirm('真的通过？', function(index){
-		        var jsData={'id':data.Id,'state':parseInt(2)}
-				$.post('/v1/personal/leave/change', jsData, function (out) {
+		        var jsData={'id':data.Id,'status':"已通过"}
+				$.post('/v1/jxkc/change', jsData, function (out) {
 	                if (out.code == 200) {
 	                    layer.alert('已通过', {icon: 1},function(index){
 	                        layer.close(index);
@@ -130,8 +133,8 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		      });
 			}else if(layEvent === 'no'){
 				layer.confirm('真的驳回？', function(index){
-		        var jsData={'id':data.Id,'state':parseInt(3)}
-				$.post('/v1/personal/leave/change', jsData, function (out) {
+		        var jsData={'id':data.Id,'status':"未通过"}
+				$.post('/v1/jxkc/change', jsData, function (out) {
 	                if (out.code == 200) {
 	                    layer.alert('驳回成功了', {icon: 1},function(index){
 	                        layer.close(index);

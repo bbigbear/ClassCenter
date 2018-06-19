@@ -114,6 +114,25 @@ func (this *JxkcController) Edit() {
 	this.TplName = "jxkc_edit.tpl"
 }
 
+func (this *JxkcController) Look() {
+	o := orm.NewOrm()
+	var maps []orm.Params
+	kc := new(models.Jxkc)
+
+	id := this.Input().Get("id")
+	fmt.Println("id:", id)
+
+	num, err := o.QueryTable(kc).Filter("Id", id).Values(&maps)
+	if err != nil {
+		fmt.Println("edit jxkc err", err.Error())
+		this.ajaxMsg("edit jxkc err", MSG_ERR_Resources)
+	}
+	fmt.Println("edit rq reslut num:", num)
+	this.Data["m"] = maps
+	fmt.Println("maps", maps)
+	this.TplName = "jxkc_look.tpl"
+}
+
 func (this *JxkcController) EditAction() {
 	fmt.Println("edit action")
 	o := orm.NewOrm()
@@ -121,11 +140,67 @@ func (this *JxkcController) EditAction() {
 	json.Unmarshal(this.Ctx.Input.RequestBody, &kc)
 	fmt.Println("kc_info:", &kc)
 	//updata jxkc db
-	_, err := o.Update(&kc)
+	//time
+	nowtime, err := time.Parse("2006-01-02 15:04:05", time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
-		fmt.Println("updata jxkc err", err.Error())
+		fmt.Println("time err", err.Error())
+	}
+	kc.CreateTime = nowtime
+	_, err1 := o.Update(&kc)
+	if err1 != nil {
+		fmt.Println("updata jxkc err", err1.Error())
 		this.ajaxMsg("updata jxkc err", MSG_ERR_Resources)
 	}
 	this.ajaxMsg("update jxkc success", MSG_OK)
+	return
+}
+
+func (this *JxkcController) ChangeStatus() {
+	fmt.Println("change status")
+	//id
+	id, err := this.GetInt("id")
+	if err != nil {
+		fmt.Println("get id err", err.Error())
+		this.ajaxMsg("get id err", MSG_ERR_Param)
+	}
+	fmt.Println("id:", id)
+	//status
+	status := this.GetString("status")
+	fmt.Println("status is", status)
+
+	o := orm.NewOrm()
+	kc := new(models.Jxkc)
+	//updata status db
+	num, err := o.QueryTable(kc).Filter("Id", id).Update(orm.Params{
+		"Status": status,
+	})
+	if err != nil {
+		fmt.Println("change status err", err.Error())
+		this.ajaxMsg("change status err", MSG_ERR_Resources)
+	}
+	fmt.Println("num", num)
+	this.ajaxMsg("update status success", MSG_OK)
+	return
+}
+
+func (this *JxkcController) Del() {
+	fmt.Println("del jxkc")
+	//id
+	id, err := this.GetInt("id")
+	if err != nil {
+		fmt.Println("del jxkc err", err.Error())
+		this.ajaxMsg("del jxkc err", MSG_ERR_Param)
+	}
+	fmt.Println("id:", id)
+	o := orm.NewOrm()
+	kc := new(models.Jxkc)
+	num, err := o.QueryTable(kc).Filter("Id", id).Delete()
+	if err != nil {
+		fmt.Println("del jxkc err", err.Error())
+		this.ajaxMsg("del jxkc err", MSG_ERR_Resources)
+	}
+	fmt.Println("del train reslut num:", num)
+	//list["data"] = maps
+	this.ajaxMsg("del jxkc success", MSG_OK)
 	return
 }

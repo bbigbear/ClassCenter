@@ -106,7 +106,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 			  //time: 2000, //2秒后自动关闭
 			  maxmin: true,
 			  anim: 2,
-			  content: ['/v1/jxkc/edit?id='+data.Id], //iframe的url，no代表不显示滚动条
+			  content: ['/v1/jxkc/look?id='+data.Id], //iframe的url，no代表不显示滚动条
 			  cancel: function(index, layero){			  
 				layer.close(index)
 				window.location.reload();
