@@ -1,4 +1,4 @@
-[[define "base_header"]]
+[<define "base_header">]
 <div class="layui-header">
     <div class="layui-logo " style="color:#F0F0F0;font-size:20px;">课程管理中心</div>
     <ul class="layui-nav layui-layout-right">
@@ -15,9 +15,9 @@
       <li class="layui-nav-item"><a href="/">退出</a></li>
     </ul>
 </div>
-[[end]]
+[<end>]
 
-[[define "base_side"]]
+[<define "base_side">]
 	<div class="layui-side-scroll">
       <ul class="layui-nav layui-nav-tree" lay-filter="test">
 		<li class="layui-nav-item">
@@ -117,4 +117,4 @@
 		</li>
       </ul>
     </div>
-[[end]]
+[<end>]

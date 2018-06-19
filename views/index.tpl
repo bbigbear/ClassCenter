@@ -17,32 +17,20 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
-    [[template "base_header".]]
+    [<template "base_header".>]
   </div> 
   <div class="layui-side layui-bg-black">
-    [[template "base_side".]]
+    [<template "base_side".>]
   </div>
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
 		<div class="layui-tab" lay-filter="demo" lay-allowclose="true">
 		  <ul class="layui-tab-title">
-		    <li class="layui-this" lay-id="11">信息中心</li>
-		    <li lay-id="22">我的桌面</li>
+		    <li class="layui-this" lay-id="11">教学课程申请</li>
 		  </ul>
 		  <div class="layui-tab-content">
-		    <div class="layui-tab-item layui-show"><iframe src='/v1/message_center' style="width:100%;height:800px;"></iframe></div>
-<!--		    <div class="layui-tab-item"><iframe src='/v1/desk' style="width:100%;height:800px;"></iframe></div>-->			
-			<div class="layui-tab-item" style="padding: 40px;">	
-				<div style="text-align:center;">
-				<i class="layui-icon" style="font-size: 30px;text-align:center;" id="setting">&#xe857;</i>设置 			
-				</div>
-				<ul id="sortable">
-				 <!-- <li class="ui-state-default" id="news"><img src="../static/img/car.png" /><span>新闻管理</span></li>
-				  <li class="ui-state-default" id="recruit_require"><img src="../static/img/car.png" /><span>招聘需求</span></li>
-				  <li class="ui-state-default" id="recruit_approval"><img src="../static/img/car.png" /><span>计划审批</span></li>-->
-				</ul>
-			</div>
+		    <div class="layui-tab-item layui-show"><iframe src='/v1/jxkc/apply' style="width:100%;height:800px;"></iframe></div>
 		  </div>
 		</div>
 	</div>
@@ -57,10 +45,6 @@
 		display: none;
 		disabled:true
 	}
-	#sortable { list-style-type: none; margin: 0; padding: 0; width: auto; }
-	#sortable li { margin: 5px 20px 20px 0; padding: 1px; float: left; width: 100px; height: 90px;text-align: center; }
-	ul li img { width: 60px; height: 60px; text-align: center; }
-	ul li span {display:block; text-align: center; }
 </style>
 
 <script src="/static/layui.js"></script>
@@ -80,19 +64,21 @@
 		$( "#sortable" ).sortable();
 	    $( "#sortable" ).disableSelection();			
 	});
-	var dic = {"公告管理": "/v1/office/announcement", "新闻管理": "/v1/office/news","招聘计划":"/v1/recruit/require","计划审批":"/v1/recruit/approval","快捷菜单设置":"/v1/quick_enter","培训计划":"/v1/train/plan","培训审批":"/v1/train/approval","考核项目设定":"/v1/perform/checkset","考核任务管理":"/v1/perform/checkmanage","被考核人自评":"/v1/perform/checkself","个人考勤":"/v1/personal/attendance","考勤审批":"/v1/attendance/approve"};
+	var dic = {"教学课程申请":"/v1/jxkc/apply","教学课程审核": "/v1/jxkc/check","教学课程维护":"/v1/jxkc/maintain","计划审批":"/v1/recruit/approval","快捷菜单设置":"/v1/quick_enter","培训计划":"/v1/train/plan","培训审批":"/v1/train/approval","考核项目设定":"/v1/perform/checkset","考核任务管理":"/v1/perform/checkmanage","被考核人自评":"/v1/perform/checkself","个人考勤":"/v1/personal/attendance","考勤审批":"/v1/attendance/approve"};
+	var noclickList=["教学课程管理","排课管理","上课时间设置","教学计划管理","选修课管理","查询统计报表","课表管理","协作组管理","集备管理","集备检查","教师备课"]
 	var newarray=new Array()
 	var list =[]
-	list[0]="信息中心"
-	list[1]="我的桌面"	
-	
+	list[0]="教学课程申请"
 	element.on('nav(test)', function(elem){
 	  //alert(dic[elem[0].textContent])
 	  console.log(elem); //得到当前点击的DOM对象
 	  console.log(elem[0].textContent);
 	  console.log(list);
 	  //console.log($.inArray(list, elem[0].textContent));
-	  ChangeTabs(elem[0].textContent)  	  	  
+	  var i= $.inArray(elem[0].textContent,noclickList)
+	  if (i==-1){
+		ChangeTabs(elem[0].textContent) 
+	  }	   	  	  
 	});
 	
 	//切换tabs
@@ -122,34 +108,7 @@
 	 // console.log(data.elem); //得到当前的Tab大容器
 	  list.splice(data.index,1);
 	});
-		
 	
-	$('#setting').on('click',function(){
-		
-		//alert("设置")
-		layer.open({
-			  type: 2,
-			  title: '设置桌面',
-			  //closeBtn: 0, //不显示关闭按钮
-			  shadeClose: true,
-			  shade: false,
-			  area: ['893px', '600px'],
-			 // offset: 'rb', //右下角弹出
-			  //time: 2000, //2秒后自动关闭
-			  maxmin: true,
-			  anim: 2,
-			  content: ['/v1/desk'], //iframe的url，no代表不显示滚动条
-			  cancel: function(index, layero){ 
-			 // if(confirm('确定要关闭么')){ //只有当点击confirm框的确定时，该层才会关闭
-			  //  layer.close(index)
-			 // }
-			   layer.close(index)
-			   window.location.reload();
-			 },
-		});		
-		return false;
-		
-	  });
 	
 			
   });

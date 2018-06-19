@@ -1,13 +1,9 @@
 package controllers
 
-import (
-	"github.com/astaxie/beego"
-)
-
 type MainController struct {
-	beego.Controller
+	BaseController
 }
 
-func (c *MainController) Get() {
-	c.TplName = "index.tpl"
+func (this *MainController) Get() {
+	this.TplName = "index.tpl"
 }

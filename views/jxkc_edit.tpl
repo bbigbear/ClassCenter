@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>新建教学课程</title>
+  <title>查看教学课程</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -186,7 +186,7 @@ body{padding: 10px;}
   </div>
   <div class="layui-form-item">
     <div class="layui-input-block">
-      <button class="layui-btn layui-btn-primary" id="add">添加</button>
+<!--      <button class="layui-btn layui-btn-primary" id="add">添加</button>-->
     </div>
   </div>
 </form>
@@ -205,7 +205,32 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
   , $ = layui.jquery
   ,layedit=layui.layedit
   ,element=layui.element;
-
+	var id;
+	$(function(){
+		[<range .m>]
+			id=[<.Id>]
+			$("#ElectiveCategory").val([<.ElectiveCategory>])
+			$("#CourseCategory").val([<.CourseCategory>])
+			$("#CourseId").val([<.CourseId>])
+			$("#CourseName").val([<.CourseName>])
+			$("#CourseEnName").val([<.CourseEnName>])
+			$("#CourseAlias").val([<.CourseAlias>])
+			$("#CourseCost").val([<.CourseCost>])
+			$("#OpeningInstitution").val([<.OpeningInstitution>])
+			$("#OpeningCoefficient").val([<.OpeningCoefficient>])
+			$("#ExaminationForm").val([<.ExaminationForm>])
+			$("#TeachingMethods").val([<.TeachingMethods>])
+			$("#TotalHours").val([<.TotalHours>])	
+			$("#TheoreticalHours").val([<.TheoreticalHours>])
+			$("#PracticeHours").val([<.PracticeHours>])
+			$("#OtherHours").val([<.OtherHours>])
+			$("#Bibliography").val([<.Bibliography>])
+			$("#Credit").val([<.Credit>])
+			$("#CourseIntroduction").val([<.CourseIntroduction>])
+			$("#CourseNumber").val([<.CourseNumber>])
+			$("#NoCourseNumber").val([<.NoCourseNumber>])		
+		[<end>]
+	})
 	//文本域
 	var index=layedit.build('detail',{
 		hideTool:['image','face']
@@ -217,6 +242,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 		var TeachingMethods=$("#TeachingMethods").val()
 		var OpeningInstitution=$("#OpeningInstitution").val()
 		var data={
+			'Id':id,
 			'ElectiveCategory':$("#ElectiveCategory").val(),
 			'CourseCategory':$("#CourseCategory").val(),
 			'CourseId':$("#CourseId").val(),
@@ -246,7 +272,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 				$.ajax({
 					type:"POST",
 					contentType:"application/json;charset=utf-8",
-					url:"/v1/jxkc/add_action",
+					url:"/v1/jxkc/edit_action",
 					data:JSON.stringify(data),
 					async:false,
 					error:function(request){
