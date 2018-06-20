@@ -21,4 +21,16 @@ func init() {
 	beego.Router("/v1/jxkc/del", &controllers.JxkcController{}, "post:Del")
 	beego.Router("/v1/jxkc/edit_action", &controllers.JxkcController{}, "post:EditAction")
 	beego.Router("/v1/jxkc/change", &controllers.JxkcController{}, "post:ChangeStatus")
+	//jxjh
+	beego.Router("/v1/jxjh/apply", &controllers.JxjhController{}, "*:ApplyGet")
+	beego.Router("/v1/jxjh/check", &controllers.JxjhController{}, "*:CheckGet")
+	beego.Router("/v1/jxjh/maintain", &controllers.JxjhController{}, "*:MaintainGet")
+	beego.Router("/v1/jxjh/add", &controllers.JxjhController{}, "*:Add")
+	beego.Router("/v1/jxjh/add_action", &controllers.JxjhController{}, "post:AddAction")
+	beego.Router("/v1/jxjh/getdata", &controllers.JxjhController{}, "Get:GetData")
+	beego.Router("/v1/jxjh/look", &controllers.JxjhController{}, "*:Look")
+	beego.Router("/v1/jxjh/edit", &controllers.JxjhController{}, "*:Edit")
+	beego.Router("/v1/jxjh/del", &controllers.JxjhController{}, "post:Del")
+	beego.Router("/v1/jxjh/edit_action", &controllers.JxjhController{}, "post:EditAction")
+	beego.Router("/v1/jxjh/change", &controllers.JxjhController{}, "post:ChangeStatus")
 }

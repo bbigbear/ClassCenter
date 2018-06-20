@@ -205,10 +205,8 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
   , $ = layui.jquery
   ,layedit=layui.layedit
   ,element=layui.element;
-	var id;
 	$(function(){
 		[<range .m>]
-			id=[<.Id>]
 			$("#ElectiveCategory").val([<.ElectiveCategory>])
 			$("#CourseCategory").val([<.CourseCategory>])
 			$("#CourseId").val([<.CourseId>])
@@ -236,64 +234,6 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 		hideTool:['image','face']
 	});
 
-	//数据上传
-	function uploadData(){
-		var ExaminationForm=$("#ExaminationForm").val()
-		var TeachingMethods=$("#TeachingMethods").val()
-		var OpeningInstitution=$("#OpeningInstitution").val()
-		var data={
-			'Id':id,
-			'ElectiveCategory':$("#ElectiveCategory").val(),
-			'CourseCategory':$("#CourseCategory").val(),
-			'CourseId':$("#CourseId").val(),
-			'CourseName':$("#CourseName").val(),
-			'CourseEnName':$("#CourseEnName").val(),
-			'CourseAlias':$("#CourseAlias").val(),
-			'CourseCost':$("#CourseCost").val(),
-			'OpeningInstitution':OpeningInstitution,
-			'OpeningCoefficient':$("#OpeningCoefficient").val(),
-			'ExaminationForm':ExaminationForm,
-			'TeachingMethods':TeachingMethods,
-			'TotalHours':parseFloat($("#TotalHours").val()),			
-			'TheoreticalHours':parseFloat($("#TheoreticalHours").val()),
-			'PracticeHours':parseFloat($("#PracticeHours").val()),
-			'OtherHours':parseFloat($("#OtherHours").val()),
-			'Bibliography':$("#Bibliography").val(),
-			'Credit':parseFloat($("#Credit").val()),
-			'CourseIntroduction':$("#CourseIntroduction").val(),
-			'CourseNumber':$("#CourseNumber").val(),
-			'NoCourseNumber':$("#NoCourseNumber").val()
-			};
-			console.log(data)
-			if(ExaminationForm=="请选择"||TeachingMethods=="请选择"||OpeningInstitution=="请选择"){
-				alert("下拉列表不能为空")
-			}else{
-				//发布
-				$.ajax({
-					type:"POST",
-					contentType:"application/json;charset=utf-8",
-					url:"/v1/jxkc/edit_action",
-					data:JSON.stringify(data),
-					async:false,
-					error:function(request){
-						alert("post error")						
-					},
-					success:function(res){
-						if(res.code==200){
-							alert("保存成功")
-							window.location.reload();		
-						}else{
-							alert("保存失败")
-						}						
-					}
-			  	});	
-			}
-	}
-	
-	$('#add').on('click',function(){
-		uploadData()
-		return false;
-	});
 	
 });
 </script>

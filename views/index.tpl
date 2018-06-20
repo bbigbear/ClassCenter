@@ -64,7 +64,7 @@
 		$( "#sortable" ).sortable();
 	    $( "#sortable" ).disableSelection();			
 	});
-	var dic = {"教学课程申请":"/v1/jxkc/apply","教学课程审核": "/v1/jxkc/check","教学课程维护":"/v1/jxkc/maintain","计划审批":"/v1/recruit/approval","快捷菜单设置":"/v1/quick_enter","培训计划":"/v1/train/plan","培训审批":"/v1/train/approval","考核项目设定":"/v1/perform/checkset","考核任务管理":"/v1/perform/checkmanage","被考核人自评":"/v1/perform/checkself","个人考勤":"/v1/personal/attendance","考勤审批":"/v1/attendance/approve"};
+	var dic = {"教学课程申请":"/v1/jxkc/apply","教学课程审核": "/v1/jxkc/check","教学课程维护":"/v1/jxkc/maintain","计划申请":"/v1/jxjh/apply","计划审核": "/v1/jxjh/check","计划维护":"/v1/jxjh/maintain","培训审批":"/v1/train/approval","考核项目设定":"/v1/perform/checkset","考核任务管理":"/v1/perform/checkmanage","被考核人自评":"/v1/perform/checkself","个人考勤":"/v1/personal/attendance","考勤审批":"/v1/attendance/approve"};
 	var noclickList=["教学课程管理","排课管理","上课时间设置","教学计划管理","选修课管理","查询统计报表","课表管理","协作组管理","集备管理","集备检查","教师备课"]
 	var newarray=new Array()
 	var list =[]
