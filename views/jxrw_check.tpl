@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>教学计划申请</title>
+  <title>教学任务审核</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -45,7 +45,13 @@ body{padding: 10px;}
       </select>
     </div>
   </div>
-  <div>
+  <div class="layui-inline">
+    <label class="layui-form-label">课程名称</label>
+    <div class="layui-input-inline" style="width: 150px;">
+      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  </div>
   <div class="layui-form-item">
   <div class="layui-inline">
     <label class="layui-form-label">班级</label>
@@ -58,22 +64,56 @@ body{padding: 10px;}
     </div>
   </div>
   <div class="layui-inline">
+    <label class="layui-form-label">学期</label>
+    <div class="layui-input-inline" style="width: 150px;">
+      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
+		    <option value="上学期" > 上学期</option>
+			<option value="下学期" > 下学期</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">业务进度</label>
+    <div class="layui-input-inline" style="width: 150px;">
+      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
+		    <option value="上学期" > 尚未分配</option>
+			<option value="待提交" > 待提交</option>
+			<option value="待审核" > 待审核</option>
+			<option value="已审核" > 已审核</option>
+      </select>
+    </div>
+  </div>
+  </div>
+  <div class="layui-form-item">
+  <div class="layui-inline">
+    <label class="layui-form-label">教师工号</label>
+    <div class="layui-input-inline" style="width: 150px;">
+      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-inline">
     <label class="layui-form-label">计划编号</label>
     <div class="layui-input-inline" style="width: 150px;">
       <input type="text" id="PlanId" autocomplete="off" class="layui-input">
     </div>
   </div>
-  <div>
+  <div class="layui-inline">
+    <label class="layui-form-label">教师姓名</label>
+    <div class="layui-input-inline" style="width: 150px;">
+      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  </div>
   <div class="layui-form-item">
-    <div class="layui-inline layui-layout-right" style="padding:10px;">
+    <div class="layui-inline" style="padding-left:50px;">
     	<button class="layui-btn" id="query">查询</button>
-		<button class="layui-btn" id="clear">清除条件</button>
-<!--		<button class="layui-btn" id="add">新建计划</button>-->
+		<button class="layui-btn" id="clear">导出</button>
+		<button class="layui-btn" id="add">批量审核</button>
+		<button class="layui-btn" id="add">删除</button>
+		<button class="layui-btn" id="add">清除数据</button>
   	</div>
   </div>
 </form>
-
-<br><br>
 
 	<table id="list" lay-filter="announcement" style="width:auto;"></table>
 	<script type="text/html" id="barDemo">

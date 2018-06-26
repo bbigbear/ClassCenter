@@ -33,4 +33,17 @@ func init() {
 	beego.Router("/v1/jxjh/del", &controllers.JxjhController{}, "post:Del")
 	beego.Router("/v1/jxjh/edit_action", &controllers.JxjhController{}, "post:EditAction")
 	beego.Router("/v1/jxjh/change", &controllers.JxjhController{}, "post:ChangeStatus")
+	//jxrw
+	beego.Router("/v1/jxrw/allot", &controllers.JxjhController{}, "*:JxrwAllotGet")
+	beego.Router("/v1/jxrw/generate", &controllers.JxjhController{}, "*:JxrwGenerateGet")
+	beego.Router("/v1/jxrw/check", &controllers.JxjhController{}, "*:JxrwCheckGet")
+	//xkgl
+	beego.Router("/v1/xkgl/setting", &controllers.XkglController{}, "*:SettingGet")
+	beego.Router("/v1/xkgl/classroom", &controllers.XkglController{}, "*:ClassRoomUnarrangingTimeGet")
+	beego.Router("/v1/xkgl/teacher", &controllers.XkglController{}, "*:TeacherUnarrangingTimeGet")
+	beego.Router("/v1/xkgl/eletive", &controllers.XkglController{}, "*:EletivePkGet")
+	beego.Router("/v1/xkgl/compulsory", &controllers.XkglController{}, "*:CompulsoryPkGet")
+	//sksj
+	beego.Router("/v1/sksj/eletive", &controllers.SKsjController{}, "*:EletiveGet")
+	beego.Router("/v1/sksj/compulsory", &controllers.SKsjController{}, "*:CompulsoryGet")
 }

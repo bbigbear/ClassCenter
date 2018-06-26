@@ -31,11 +31,11 @@
         <li class="layui-nav-item">
           <a class="" href="javascript:;">排课管理</a>
           <dl class="layui-nav-child">
-            <dd><a href="javascript:;">选修课排课</a></dd>			
+            <dd><a href="javascript:;">选修课排课</a></dd>
+			<dd><a href="javascript:;">必修课排课</a></dd>			
             <dd><a href="javascript:;">排课参数设置</a></dd>			
             <dd><a href="javascript:;">教师不排课时间设置</a></dd>			
-            <dd><a href="javascript:;">教师不排课时间设置</a></dd>
-            <dd><a href="javascript:;">必修课排课</a></dd>			
+            <dd><a href="javascript:;">教室不排课时间设置</a></dd>            			
           </dl>
         </li>
         <li class="layui-nav-item">

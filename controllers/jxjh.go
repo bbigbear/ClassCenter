@@ -206,3 +206,14 @@ func (this *JxjhController) Del() {
 	this.ajaxMsg("del jxjh success", MSG_OK)
 	return
 }
+func (this *JxjhController) JxrwAllotGet() {
+	this.TplName = "jxrw_allot.tpl"
+}
+
+func (this *JxjhController) JxrwGenerateGet() {
+	this.TplName = "jxrw_check.tpl"
+}
+
+func (this *JxjhController) JxrwCheckGet() {
+	this.TplName = "jxrw_check.tpl"
+}

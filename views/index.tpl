@@ -64,7 +64,8 @@
 		$( "#sortable" ).sortable();
 	    $( "#sortable" ).disableSelection();			
 	});
-	var dic = {"教学课程申请":"/v1/jxkc/apply","教学课程审核": "/v1/jxkc/check","教学课程维护":"/v1/jxkc/maintain","计划申请":"/v1/jxjh/apply","计划审核": "/v1/jxjh/check","计划维护":"/v1/jxjh/maintain","培训审批":"/v1/train/approval","考核项目设定":"/v1/perform/checkset","考核任务管理":"/v1/perform/checkmanage","被考核人自评":"/v1/perform/checkself","个人考勤":"/v1/personal/attendance","考勤审批":"/v1/attendance/approve"};
+	var dic = {"教学课程申请":"/v1/jxkc/apply","教学课程审核": "/v1/jxkc/check","教学课程维护":"/v1/jxkc/maintain","计划申请":"/v1/jxjh/apply","计划审核": "/v1/jxjh/check","计划维护":"/v1/jxjh/maintain","教学任务生成":"/v1/jxrw/generate","教学任务分配":"/v1/jxrw/allot","教学任务审核":"/v1/jxrw/check",
+	"排课参数设置":"/v1/xkgl/setting","教室不排课时间设置":"/v1/xkgl/classroom","教师不排课时间设置":"/v1/xkgl/teacher","选修课排课":"/v1/xkgl/eletive","必修课排课":"/v1/xkgl/compulsory","选修课课表设置":"/v1/sksj/eletive","必修课课表设置":"/v1/sksj/compulsory"};
 	var noclickList=["教学课程管理","排课管理","上课时间设置","教学计划管理","选修课管理","查询统计报表","课表管理","协作组管理","集备管理","集备检查","教师备课"]
 	var newarray=new Array()
 	var list =[]

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>教学任务分配</title>
+  <title>教室不排课时间设置</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -19,87 +19,49 @@ body{padding: 10px;}
 <body>
 <form class="layui-form layui-form-pane1" action="">
   <div class="layui-form-item">
-  <div class="layui-inline">
-    <label class="layui-form-label">所属专业</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="Major" id="Major" lay-filter="status_select">
-		    <option value="专业名称" > 专业名称</option>
-			<option value="计算机软件" > 计算机软件</option>
-			<option value="物流服务与管理" > 物流服务与管理</option>
-			<option value="市场营销" > 市场营销</option>
-			<option value="计算机应用" > 计算机应用</option>
-			<option value="电子商务" > 电子商务</option>
-			<option value="信息管理" > 信息管理</option>
-			<option value="电气自动化" > 电气自动化</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">计划年级</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanGrade" id="PlanGrade" lay-filter="status_select">
-		    <option value="2018" > 2018</option>
-			<option value="2017" > 2017</option>
-			<option value="2016" > 2016</option>
-			<option value="2015" > 2015</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">课程名称</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
-    </div>
-  </div>
+	  <div class="layui-inline">
+		<label class="layui-form-label">年级</label>
+	    <div class="layui-input-inline" style="width: 150px;">
+	      <select name="Major" id="Major" lay-filter="status_select">
+			    <option value="选择" > 选择</option>
+				<option value="2012" >2012</option>
+				<option value="2013" >2013</option>
+				<option value="2014" >2014</option>
+				<option value="2015" >2015</option>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="layui-inline">
+		<label class="layui-form-label">安排班级</label>
+	    <div class="layui-input-inline" style="width: 150px;">
+	      <select name="Major" id="Major" lay-filter="status_select">
+			    <option value="选择" > 选择</option>
+				<option value="1" >1</option>
+				<option value="2" >2</option>
+				<option value="3" >3</option>
+				<option value="4" >4</option>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="layui-inline">
+	    <button class="layui-btn" id="query">搜索</button>
+	  </div>
   </div>
   <div class="layui-form-item">
-  <div class="layui-inline">
-    <label class="layui-form-label">班级</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
-		    <option value="1" > 1</option>
-			<option value="2" > 2</option>
-			<option value="3" > 3</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">学期</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
-		    <option value="上学期" > 上学期</option>
-			<option value="下学期" > 下学期</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">业务进度</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
-		    <option value="上学期" > 尚未分配</option>
-			<option value="待提交" > 待提交</option>
-			<option value="待审核" > 待审核</option>
-			<option value="已审核" > 已审核</option>
-      </select>
-    </div>
-  </div>
-  </div>
-  <div class="layui-form-item">
-    <div class="layui-inline" style="padding-left:50px;">
-    	<button class="layui-btn" id="query">查询</button>
-		<button class="layui-btn" id="clear">清除条件</button>
-<!--		<button class="layui-btn" id="add">新建计划</button>-->
-		<button class="layui-btn" id="add">批量分配</button>
-		<button class="layui-btn" id="add">提交分配结果</button>
+    <div class="layui-inline layui-layout-right" style="padding:10px;">
+    	<button class="layui-btn" id="query">开始设置时间</button>
+		<button class="layui-btn" id="add">清楚选择</button>
   	</div>
   </div>
 </form>
 
+<br><br>
+
 	<table id="list" lay-filter="announcement" style="width:auto;"></table>
 	<script type="text/html" id="barDemo">
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del">删除</a>
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allot">分配计划课程</a>
+		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">查看</a>
+		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del">查看课程</a>
+		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allot">重新生成</a>
 	</script>
 <script src="/static/layui.js"></script>
 <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
@@ -118,21 +80,20 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 	$(function(){
 				
 	});	
-	 //table 渲染
+	//table 渲染
 	  table.render({
 	    elem: '#list'
 	    ,height: 315
 	    ,url: '/v1/jxjh/getdata'//数据接口
 	    //,page: true //开启分页
 		,id: 'listReload'
-	    ,cols: [[   
+	    ,cols: [[
 	      {field:'PlanId', title:'计划编号', width:120}
 		  ,{field:'Major',  title:'计划专业', width:120}
 	      ,{field:'PlanGrade',  title:'计划年级', width:120}
 		  ,{field:'PlanClass',  title:'计划班级', width:120}
 		  ,{field:'TotalCredits',  title:'总学分要求', width:120}
-		  ,{field:'ApplyTime',  title:'申请日期', width:120}
-		  ,{field:'Status',  title:'进度', width:120}
+		  ,{field:'ApplyTime',  title:'生成情况', width:120}
 		  ,{fixed: 'right', title:'操作',width:200, align:'center', toolbar: '#barDemo'}
 	    ]]
 	  });
