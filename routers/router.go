@@ -8,7 +8,6 @@ import (
 
 func init() {
 	beego.Router("/", &controllers.MainController{})
-
 	//jxkc
 	beego.Router("/v1/jxkc/apply", &controllers.JxkcController{}, "*:ApplyGet")
 	beego.Router("/v1/jxkc/check", &controllers.JxkcController{}, "*:CheckGet")
@@ -37,13 +36,23 @@ func init() {
 	beego.Router("/v1/jxrw/allot", &controllers.JxjhController{}, "*:JxrwAllotGet")
 	beego.Router("/v1/jxrw/generate", &controllers.JxjhController{}, "*:JxrwGenerateGet")
 	beego.Router("/v1/jxrw/check", &controllers.JxjhController{}, "*:JxrwCheckGet")
-	//xkgl
-	beego.Router("/v1/xkgl/setting", &controllers.XkglController{}, "*:SettingGet")
-	beego.Router("/v1/xkgl/classroom", &controllers.XkglController{}, "*:ClassRoomUnarrangingTimeGet")
-	beego.Router("/v1/xkgl/teacher", &controllers.XkglController{}, "*:TeacherUnarrangingTimeGet")
-	beego.Router("/v1/xkgl/eletive", &controllers.XkglController{}, "*:EletivePkGet")
-	beego.Router("/v1/xkgl/compulsory", &controllers.XkglController{}, "*:CompulsoryPkGet")
+	//pkgl
+	beego.Router("/v1/pkgl/setting", &controllers.PkglController{}, "*:SettingGet")
+	beego.Router("/v1/pkgl/classroom", &controllers.PkglController{}, "*:ClassRoomUnarrangingTimeGet")
+	beego.Router("/v1/pkgl/teacher", &controllers.PkglController{}, "*:TeacherUnarrangingTimeGet")
+	beego.Router("/v1/pkgl/eletive", &controllers.PkglController{}, "*:EletivePkGet")
+	beego.Router("/v1/pkgl/compulsory", &controllers.PkglController{}, "*:CompulsoryPkGet")
 	//sksj
-	beego.Router("/v1/sksj/eletive", &controllers.SKsjController{}, "*:EletiveGet")
-	beego.Router("/v1/sksj/compulsory", &controllers.SKsjController{}, "*:CompulsoryGet")
+	beego.Router("/v1/sksj/eletive", &controllers.SksjController{}, "*:EletiveGet")
+	beego.Router("/v1/sksj/compulsory", &controllers.SksjController{}, "*:CompulsoryGet")
+	//xxkgl
+	beego.Router("/v1/xxkgl/setting", &controllers.XxkglController{}, "*:SettingGet")
+	beego.Router("/v1/xxkgl/task", &controllers.XxkglController{}, "*:TaskGet")
+	beego.Router("/v1/xxkgl/apply", &controllers.XxkglController{}, "*:ApplyGet")
+	beego.Router("/v1/xxkgl/approve", &controllers.XxkglController{}, "*:ApproveGet")
+	//kbgl
+	beego.Router("/v1/kbgl/classroom", &controllers.KbglController{}, "*:ClassRoomGet")
+	beego.Router("/v1/kbgl/teacher", &controllers.KbglController{}, "*:TeacherGet")
+	beego.Router("/v1/kbgl/teachingclass", &controllers.KbglController{}, "*:TeachingClassGet")
+
 }

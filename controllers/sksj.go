@@ -10,14 +10,14 @@ package controllers
 //	"github.com/astaxie/beego/orm"
 //)
 
-type SKsjController struct {
+type SksjController struct {
 	BaseController
 }
 
-func (this *SKsjController) CompulsoryGet() {
+func (this *SksjController) CompulsoryGet() {
 	this.TplName = "sksj_compulsory_setting.tpl"
 }
 
-func (this *SKsjController) EletiveGet() {
+func (this *SksjController) EletiveGet() {
 	this.TplName = "sksj_eletive_setting.tpl"
 }
