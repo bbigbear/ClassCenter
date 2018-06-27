@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>课时管理</title>
+  <title>执行教案审核</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -22,48 +22,9 @@ body{padding: 10px;}
   <div class="layui-inline">
     <label class="layui-form-label">学期</label>
     <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
-		    <option value="选择学期" > 选择学期</option>
-			<option value="2" > 2</option>
-			<option value="3" > 3</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">所属专业</label>
-    <div class="layui-input-inline" style="width: 150px;">
       <select name="Major" id="Major" lay-filter="status_select">
-		    <option value="专业名称" > 专业名称</option>
+		    <option value="选择学期" > 选择学期</option>
 			<option value="计算机软件" > 计算机软件</option>
-			<option value="物流服务与管理" > 物流服务与管理</option>
-			<option value="市场营销" > 市场营销</option>
-			<option value="计算机应用" > 计算机应用</option>
-			<option value="电子商务" > 电子商务</option>
-			<option value="信息管理" > 信息管理</option>
-			<option value="电气自动化" > 电气自动化</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">计划年级</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanGrade" id="PlanGrade" lay-filter="status_select">
-		    <option value="2018" > 2018</option>
-			<option value="2017" > 2017</option>
-			<option value="2016" > 2016</option>
-			<option value="2015" > 2015</option>
-      </select>
-    </div>
-  </div>
-  <div>
-  <div class="layui-form-item">
-  <div class="layui-inline">
-    <label class="layui-form-label">班级</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
-		    <option value="1" > 1</option>
-			<option value="2" > 2</option>
-			<option value="3" > 3</option>
       </select>
     </div>
   </div>
@@ -73,7 +34,39 @@ body{padding: 10px;}
       <input type="text" id="PlanId" autocomplete="off" class="layui-input">
     </div>
   </div>
-  <div>
+  <div class="layui-inline">
+    <label class="layui-form-label">教师名称</label>
+    <div class="layui-input-inline" style="width: 150px;">
+      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
+		    <option value="1" > 1</option>
+			<option value="2" > 2</option>
+			<option value="3" > 3</option>
+      </select>
+    </div>
+  </div>
+  </div>
+  <div class="layui-form-item">
+  <div class="layui-inline">
+    <label class="layui-form-label">教研组</label>
+    <div class="layui-input-inline" style="width: 150px;">
+      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
+		    <option value="已提交" > 已提交</option>
+			<option value="2" > 2</option>
+			<option value="3" > 3</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">评价等级</label>
+    <div class="layui-input-inline" style="width: 150px;">
+      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
+		    <option value="A" > A</option>
+			<option value="2" > 2</option>
+			<option value="3" > 3</option>
+      </select>
+    </div>
+  </div>
+  </div>
   <div class="layui-form-item">
     <div class="layui-inline layui-layout-right" style="padding:10px;">
     	<button class="layui-btn" id="query">查询</button>
