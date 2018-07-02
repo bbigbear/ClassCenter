@@ -278,3 +278,18 @@ func (this *JxjhController) JhkcAllotSave() {
 	this.ajaxList("add success", MSG_OK, 1, list)
 	return
 }
+func (this *JxjhController) Jhkclook() {
+	planId := this.GetString("planId")
+	if planId == "" {
+		fmt.Println("get jxjh id null")
+	}
+	var maps []orm.Params
+	rw := new(models.Jxrw)
+	o := orm.NewOrm()
+	_, err := o.QueryTable(rw).Filter("PlanId", planId).Values(&maps)
+	if err != nil {
+		fmt.Println("get rw err", err.Error())
+	}
+	this.Data["m"] = maps
+	this.TplName = "jxrw_kc_look.tpl"
+}

@@ -99,7 +99,7 @@ body{padding: 10px;}
 	<script type="text/html" id="barDemo">
 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del">删除</a>
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allot">分配计划课程</a>
+		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allot">分配任务</a>
 	</script>
 <script src="/static/layui.js"></script>
 <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
@@ -162,23 +162,6 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 				});
 	    	}else if(layEvent === 'allot'){
 		      layer.msg('分配计划课程');
-		    }else if(layEvent === 'del'){
-		      layer.confirm('真的删除行么', function(index){
-		        var jsData={'id':data.Id}
-				$.post('/v1/jxkc/del', jsData, function (out) {
-	                if (out.code == 200) {
-	                    layer.alert('删除成功了', {icon: 1},function(index){
-	                        layer.close(index);
-	                        table.reload({});
-	                    });
-	                } else {
-	                    layer.msg(out.message)
-	                }
-	            }, "json");
-				obj.del(); //删除对应行（tr）的DOM结构
-		        layer.close(index);
-		        //向服务端发送删除指令
-		      });
 		    }
 	  });
   

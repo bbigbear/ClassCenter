@@ -38,6 +38,7 @@ func init() {
 	//jxrw
 	beego.Router("/v1/jxrw/allot", &controllers.JxjhController{}, "*:JxrwAllotGet")
 	beego.Router("/v1/jxrw/generate", &controllers.JxjhController{}, "*:JxrwGenerateGet")
+	beego.Router("/v1/jxrw/kc/look", &controllers.JxjhController{}, "*:Jhkclook")
 	beego.Router("/v1/jxrw/check", &controllers.JxjhController{}, "*:JxrwCheckGet")
 	//pkgl
 	beego.Router("/v1/pkgl/setting", &controllers.PkglController{}, "*:SettingGet")

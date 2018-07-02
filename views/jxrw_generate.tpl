@@ -87,8 +87,8 @@ body{padding: 10px;}
 	<table id="list" lay-filter="announcement" style="width:auto;"></table>
 	<script type="text/html" id="barDemo">
 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">查看</a>
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del">查看课程</a>
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allot">重新生成</a>
+		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="look">查看课程</a>
+<!--		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allot">重新生成</a>-->
 	</script>
 <script src="/static/layui.js"></script>
 <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
@@ -128,20 +128,19 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		table.on('tool(announcement)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 		    var data = obj.data //获得当前行数据
 		    ,layEvent = obj.event; //获得 lay-event 对应的值
-		    if(layEvent === 'edit'){
+		    if(layEvent === 'look'){
 		      //layer.msg('查看操作');		
 				  layer.open({
 				  type: 2,
-				  title: '编辑计划',
+				  title: '查看课程',
 				  //closeBtn: 0, //不显示关闭按钮
 				  shadeClose: true,
 				  shade: false,
 				  area: ['893px', '600px'],
-				 // offset: 'rb', //右下角弹出
 				  //time: 2000, //2秒后自动关闭
 				  maxmin: true,
 				  anim: 2,
-				  content: ['/v1/jxjh/edit?id='+data.Id], //iframe的url，no代表不显示滚动条
+				  content: ['/v1/jxrw/kc/look?planId='+data.PlanId], //iframe的url，no代表不显示滚动条
 				  cancel: function(index, layero){			  
 					layer.close(index)
 					window.location.reload();
@@ -150,23 +149,6 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 				});
 	    	}else if(layEvent === 'allot'){
 		      layer.msg('分配计划课程');
-		    }else if(layEvent === 'del'){
-		      layer.confirm('真的删除行么', function(index){
-		        var jsData={'id':data.Id}
-				$.post('/v1/jxkc/del', jsData, function (out) {
-	                if (out.code == 200) {
-	                    layer.alert('删除成功了', {icon: 1},function(index){
-	                        layer.close(index);
-	                        table.reload({});
-	                    });
-	                } else {
-	                    layer.msg(out.message)
-	                }
-	            }, "json");
-				obj.del(); //删除对应行（tr）的DOM结构
-		        layer.close(index);
-		        //向服务端发送删除指令
-		      });
 		    }
 	  });
   
