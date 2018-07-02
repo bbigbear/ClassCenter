@@ -18,3 +18,13 @@ type Jxjh struct {
 	ApplyDescription string
 	Status           string
 }
+
+type Jxrw struct {
+	Id         int64
+	CourseId   string
+	CourseName string
+	Term       string
+	PlanId     string
+	State      int
+	Core       int
+}

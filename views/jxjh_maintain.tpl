@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>教学计划申请</title>
+  <title>教学计划维护</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -141,7 +141,25 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 				  },
 				});
 	    	}else if(layEvent === 'allot'){
-		      layer.msg('分配计划课程');
+		      	//layer.msg('分配计划课程');
+				layer.open({
+				  type: 2,
+				  title: '计划课程分配',
+				  //closeBtn: 0, //不显示关闭按钮
+				  shadeClose: true,
+				  shade: false,
+				  area: ['893px', '600px'],
+				 // offset: 'rb', //右下角弹出
+				  //time: 2000, //2秒后自动关闭
+				  maxmin: true,
+				  anim: 2,
+				  content: ['/v1/jxjh/jxkc/allot?planId='+data.PlanId], //iframe的url，no代表不显示滚动条
+				  cancel: function(index, layero){			  
+					layer.close(index)
+					window.location.reload();
+				  	return false; 
+				  },
+				});
 		    }else if(layEvent === 'del'){
 		      layer.confirm('真的删除行么', function(index){
 		        var jsData={'id':data.Id}

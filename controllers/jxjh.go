@@ -206,6 +206,7 @@ func (this *JxjhController) Del() {
 	this.ajaxMsg("del jxjh success", MSG_OK)
 	return
 }
+
 func (this *JxjhController) JxrwAllotGet() {
 	this.TplName = "jxrw_allot.tpl"
 }
@@ -216,4 +217,90 @@ func (this *JxjhController) JxrwGenerateGet() {
 
 func (this *JxjhController) JxrwCheckGet() {
 	this.TplName = "jxrw_check.tpl"
+}
+
+func (this *JxjhController) JhkcAllotGet() {
+	var courseId string
+	planId := this.GetString("planId")
+	if planId == "" {
+		fmt.Println("get jxjh id null")
+	}
+	this.Data["planId"] = planId
+	o := orm.NewOrm()
+	rw := new(models.Jxrw)
+	var rw_info models.Jxrw
+	err := o.QueryTable(rw).Filter("PlanId", planId).One(&rw_info)
+	if err == nil {
+		courseId = rw_info.CourseId
+	} else {
+		fmt.Println("get courseId err")
+	}
+	if courseId != "" {
+		var kc_info models.Jxkc
+		kc := new(models.Jxkc)
+		err := o.QueryTable(kc).Filter("CourseId", courseId).One(&kc_info)
+		if err != nil {
+			fmt.Println("get jxkc info err", err.Error())
+		}
+		this.Data["CourseId"] = courseId
+		this.Data["CourseName"] = kc_info.CourseName
+	}
+	this.TplName = "jxjh_jhkc_allot.tpl"
+}
+
+func (this *JxjhController) JhkcAdd() {
+	planId := this.GetString("planId")
+	if planId == "" {
+		fmt.Println("get jxjh id null")
+	}
+	this.Data["planId"] = planId
+	this.TplName = "jxjh_jhkc_add.tpl"
+}
+
+func (this *JxjhController) JhkcAddAction() {
+	fmt.Println("add course")
+	o := orm.NewOrm()
+	var jxrw models.Jxrw
+	json.Unmarshal(this.Ctx.Input.RequestBody, &jxrw)
+	//courseid
+	if jxrw.CourseId == "" {
+		fmt.Println("courseId is null")
+		this.ajaxMsg("courseId is null", MSG_ERR_Param)
+	}
+	//planid
+	if jxrw.PlanId == "" {
+		fmt.Println("planId is null")
+		this.ajaxMsg("planId is null", MSG_ERR_Param)
+	}
+	list := make(map[string]interface{})
+	jxrw.State = 0
+	_, err := o.Insert(&jxrw)
+	if err != nil {
+		fmt.Printf("insert err", err.Error())
+		this.ajaxMsg("insert err", MSG_ERR_Resources)
+	}
+	list["id"] = jxrw.Id
+	this.ajaxList("add success", MSG_OK, 1, list)
+	return
+}
+
+func (this *JxjhController) JhkcAllotSave() {
+	fmt.Println("jhkc save")
+	o := orm.NewOrm()
+	var rw models.Jxrw
+	json.Unmarshal(this.Ctx.Input.RequestBody, &rw)
+	fmt.Println("jxrw_info:", &rw)
+	//update
+	_, err := o.Update(orm.Params{
+		"CourseName": rw.CourseName,
+		"Core":       rw.Core,
+		"Term":       rw.Term,
+		"State":      1,
+	})
+	if err != nil {
+		fmt.Printf("update err", err.Error())
+		this.ajaxMsg("update err", MSG_ERR_Resources)
+	}
+	this.ajaxMsg("save jhkc success", MSG_OK)
+	return
 }
