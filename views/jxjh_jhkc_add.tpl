@@ -32,9 +32,10 @@ body{padding: 10px;}
 </form>
 	<table class="layui-table" id="list" lay-filter="announcement" lay-size="sm"></table>
 <script src="/static/layui.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
 
-<script>
+<script type="text/javascript">
 layui.use(['form','laydate','upload','jquery','layedit','element','table','laytpl'], function(){
   var form = layui.form
   ,laydate=layui.laydate
@@ -84,30 +85,10 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		}else if(data.length>1){
 			alert("只能选择一门课程")
 		}else{
-			var post_data={
-						'CourseId':data[0].CourseId,
-						'PlanId':[<.planId>]				
-					}
-			$.ajax({
-					type:"POST",
-					contentType:"application/json;charset=utf-8",
-					url:"/v1/jxjh/jxkc/add_action",
-					data:JSON.stringify(post_data),
-					async:false,
-					error:function(request){
-						alert("post error")						
-					},
-					success:function(res){
-						if(res.code==200){
-							//alert("添加成功")
-							parent.setChooseValues(data[0].CourseId,data[0].CourseName);  
-					        var index = parent.layer.getFrameIndex(window.name);  
-					        parent.layer.close(index); 												
-						}else{
-							alert(res.message)
-						}						
-					}					
-				});	
+			parent.$('#CourseId').val(data[0].CourseId);
+			parent.$('#CourseName').val(data[0].CourseName)
+			var index = parent.layer.getFrameIndex(window.name);  
+			parent.layer.close(index);	
 		}
 		return false;
 	})

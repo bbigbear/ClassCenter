@@ -57,14 +57,14 @@ body{padding: 10px;}
   </div>
   <div class="layui-form-item">
     <div class="layui-inline layui-layout-right">
-      <button class="layui-btn layui-btn-primary" id="save">保存</button>
+      <button class="layui-btn layui-btn-primary" id="add">保存</button>
     </div>
   </div>
 </form>
 
 <br><br><br>
 
-
+<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="/static/layui.js"></script>
 <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
 
@@ -76,13 +76,6 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
   , $ = layui.jquery
   ,layedit=layui.layedit
   ,element=layui.element;
-	//自动加载
-	$(function(){
-		//$("#CourseId").val([<.CourseId>])
-		//$("#CourseName").val([<.CourseName>])		
-	});	
-	
-	
 	
 	 laydate.render({
 	    elem: '#SettingTime'
@@ -105,8 +98,9 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 		var Term=$("#Term").val()
 		var Core=$("#Core").val()
 		var data={
-			'CourseId':$("#PlanId").val(),
-			'CourseName':PlanGrade,
+			'PlanId':[<.planId>],
+			'CourseId':$("#CourseId").val(),
+			'CourseName':$("#CourseName").val(),
 			'Term':Term,
 			'Core':parseInt(Core)
 			};
@@ -126,8 +120,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 					},
 					success:function(res){
 						if(res.code==200){
-							alert("保存成功")
-							window.location.reload();		
+							alert("保存成功")	
 						}else{
 							alert("保存失败")
 						}						
@@ -142,7 +135,6 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 	});
 	
 	$('#choose').on('click',function(){
-		var planId = [<.planId>]
 		layer.open({
 			type: 2,
 			title: '课程选择',
@@ -151,7 +143,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 			shade: false,
 			area: ['700px', '500px'],
 			anim: 2,
-			content: ['/v1/jxjh/jxkc/add?planId='+planId], //iframe的url，no代表不显示滚动条
+			content: ['/v1/jxjh/jxkc/add'], //iframe的url，no代表不显示滚动条
 			cancel: function(index, layero){			  
 				layer.close(index)
 				window.location.reload();
@@ -160,12 +152,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 		});				
 		return false;
 	});
-	
-	function setChooseValues(CourseId,CourseName){
-		console.log(CourseId,CourseName);
-		$("#CourseId").val(CourseId)
-		$("#CourseName").val(CourseName)
-	}
+
 	
 });
 </script>

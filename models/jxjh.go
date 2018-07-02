@@ -25,6 +25,6 @@ type Jxrw struct {
 	CourseName string
 	Term       string
 	PlanId     string
-	State      int
+	Status     string
 	Core       int
 }

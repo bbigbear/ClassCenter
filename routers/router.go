@@ -27,7 +27,6 @@ func init() {
 	beego.Router("/v1/jxjh/jxkc/allot", &controllers.JxjhController{}, "*:JhkcAllotGet")
 	beego.Router("/v1/jxjh/jxkc/allot_save", &controllers.JxjhController{}, "post:JhkcAllotSave")
 	beego.Router("/v1/jxjh/jxkc/add", &controllers.JxjhController{}, "*:JhkcAdd")
-	beego.Router("/v1/jxjh/jxkc/add_action", &controllers.JxjhController{}, "*:JhkcAddAction")
 	beego.Router("/v1/jxjh/add", &controllers.JxjhController{}, "*:Add")
 	beego.Router("/v1/jxjh/add_action", &controllers.JxjhController{}, "post:AddAction")
 	beego.Router("/v1/jxjh/getdata", &controllers.JxjhController{}, "Get:GetData")

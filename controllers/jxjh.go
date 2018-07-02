@@ -212,7 +212,7 @@ func (this *JxjhController) JxrwAllotGet() {
 }
 
 func (this *JxjhController) JxrwGenerateGet() {
-	this.TplName = "jxrw_check.tpl"
+	this.TplName = "jxrw_generate.tpl"
 }
 
 func (this *JxjhController) JxrwCheckGet() {
@@ -249,15 +249,10 @@ func (this *JxjhController) JhkcAllotGet() {
 }
 
 func (this *JxjhController) JhkcAdd() {
-	planId := this.GetString("planId")
-	if planId == "" {
-		fmt.Println("get jxjh id null")
-	}
-	this.Data["planId"] = planId
 	this.TplName = "jxjh_jhkc_add.tpl"
 }
 
-func (this *JxjhController) JhkcAddAction() {
+func (this *JxjhController) JhkcAllotSave() {
 	fmt.Println("add course")
 	o := orm.NewOrm()
 	var jxrw models.Jxrw
@@ -273,7 +268,7 @@ func (this *JxjhController) JhkcAddAction() {
 		this.ajaxMsg("planId is null", MSG_ERR_Param)
 	}
 	list := make(map[string]interface{})
-	jxrw.State = 0
+	jxrw.Status = "生成成功"
 	_, err := o.Insert(&jxrw)
 	if err != nil {
 		fmt.Printf("insert err", err.Error())
@@ -281,26 +276,5 @@ func (this *JxjhController) JhkcAddAction() {
 	}
 	list["id"] = jxrw.Id
 	this.ajaxList("add success", MSG_OK, 1, list)
-	return
-}
-
-func (this *JxjhController) JhkcAllotSave() {
-	fmt.Println("jhkc save")
-	o := orm.NewOrm()
-	var rw models.Jxrw
-	json.Unmarshal(this.Ctx.Input.RequestBody, &rw)
-	fmt.Println("jxrw_info:", &rw)
-	//update
-	_, err := o.Update(orm.Params{
-		"CourseName": rw.CourseName,
-		"Core":       rw.Core,
-		"Term":       rw.Term,
-		"State":      1,
-	})
-	if err != nil {
-		fmt.Printf("update err", err.Error())
-		this.ajaxMsg("update err", MSG_ERR_Resources)
-	}
-	this.ajaxMsg("save jhkc success", MSG_OK)
 	return
 }
