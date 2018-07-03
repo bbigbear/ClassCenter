@@ -18,43 +18,50 @@ body{padding: 10px;}
 <body>
 <form class="layui-form" action="">
   <div class="layui-form-item">
-	<label class="layui-form-label">课程号</label>
+	<label class="layui-form-label">教师工号</label>
 	<div class="layui-inline">			    	
 		<div class="layui-input-inline" style="width: 100px;">
-      		<input type="text" name="CourseId" id="CourseId" autocomplete="off" class="layui-input">
+      		<input type="text" name="TeacherId" id="TeacherId" autocomplete="off" class="layui-input">
     	</div>
 		<div class="layui-input-inline" style="width: 100px;">
-      		<button class="layui-btn layui-btn-primary" id="choose">选择课程</button>
+      		<button class="layui-btn layui-btn-primary" id="choose">选择教师</button>
     	</div>
 	</div>
   </div>
   <div class="layui-form-item">
-	<label class="layui-form-label">课程名称</label>
+	<label class="layui-form-label">教师名称</label>
 	<div class="layui-input-inline" >
-		<input type="text" name="CourseName" id="CourseName" autocomplete="off" class="layui-input">	    	
+		<input type="text" name="TeacherName" id="TeacherName" autocomplete="off" class="layui-input">	    	
 	</div>
-	<div class="layui-form-mid layui-word-aux">*修改时候只读</div>
+	<div class="layui-form-mid layui-word-aux">*只读</div>
   </div>  
   <div class="layui-form-item">
-	    <label class="layui-form-label">执行学期</label>
+	    <label class="layui-form-label">所属校区</label>
 	    <div class="layui-input-inline" >
-		    <select name="Term" id="Term" lay-filter="style_select">
+		    <select name="Campus" id="Campus" lay-filter="style_select">
 			    <option value="未选择" > 未选择</option>
-				<option value="上学期" > 上学期</option>
-				<option value="下学期" > 下学期</option>
+				<option value="主校区" > 主校区</option>
+				<option value="分校区" > 分校区</option>
 	      	</select>
 		</div>		
   </div>
   <div class="layui-form-item">
-	    <label class="layui-form-label" style="width:auto;">是否核心课程</label>
+	    <label class="layui-form-label">教室</label>
 	    <div class="layui-input-inline" >
-		    <select name="Core" id="Core" lay-filter="style_select">
+		    <select name="Classroom" id="Classroom" lay-filter="style_select">
 			    <option value="未选择" > 未选择</option>
-				<option value="是" > 是</option>
-				<option value="否" > 否</option>
+				<option value="1班" > 1班</option>
+				<option value="2班" > 2班</option>
+				<option value="3班" > 3班</option>
 	      	</select>
 		</div>		
   </div>
+  <div class="layui-form-item">
+	<label class="layui-form-label">周课时</label>
+	<div class="layui-input-inline" >
+		<input type="text" name="WeekTime" id="WeekTime" autocomplete="off" class="layui-input">	    	
+	</div>
+  </div> 
   <div class="layui-form-item">
     <div class="layui-inline layui-layout-right">
       <button class="layui-btn layui-btn-primary" id="add">保存</button>
@@ -95,24 +102,25 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 
 	//数据上传
 	function uploadData(){
-		var Term=$("#Term").val()
-		var Core=$("#Core").val()
+		var Classroom=$("#Classroom").val()
+		var Campus=$("#Campus").val()
 		var data={
 			'PlanId':[<.planId>],
-			'CourseId':$("#CourseId").val(),
-			'CourseName':$("#CourseName").val(),
-			'Term':Term,
-			'Core':Core
+			'TeacherId':$("#TeacherId").val(),
+			'TeacherName':$("#TeacherName").val(),
+			'Campus':Campus,
+			'Classroom':Classroom,
+			'WeekTime':parseInt($("#WeekTime").val())
 			};
 			console.log(data)
-			if(Term=="请选择"||Core=="请选择"){
+			if(Classroom=="请选择"||Campus=="请选择"){
 				alert("不能为空")
 			}else{
 				//发布
 				$.ajax({
 					type:"POST",
 					contentType:"application/json;charset=utf-8",
-					url:"/v1/jxjh/jxkc/allot_save",
+					url:"/v1/jxjh/jxrw/teacher_allot_save",
 					data:JSON.stringify(data),
 					async:false,
 					error:function(request){
@@ -143,7 +151,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 			shade: false,
 			area: ['700px', '500px'],
 			anim: 2,
-			content: ['/v1/jxjh/jxkc/add'], //iframe的url，no代表不显示滚动条
+			content: ['/v1/jxjh/jxrw/teacher_add'], //iframe的url，no代表不显示滚动条
 			cancel: function(index, layero){			  
 				layer.close(index)
 				window.location.reload();

@@ -26,5 +26,17 @@ type Jxrw struct {
 	Term       string
 	PlanId     string
 	Status     string
-	Core       int
+	Core       string
+}
+
+type Jxrw_teacher_allot struct {
+	Id          int64
+	PlanId      string
+	CourseId    string
+	TeacherId   string
+	TeacherName string
+	Campus      string
+	Classroom   string
+	WeekTime    int
+	Status      string
 }

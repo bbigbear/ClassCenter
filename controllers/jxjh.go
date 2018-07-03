@@ -220,31 +220,11 @@ func (this *JxjhController) JxrwCheckGet() {
 }
 
 func (this *JxjhController) JhkcAllotGet() {
-	var courseId string
 	planId := this.GetString("planId")
 	if planId == "" {
 		fmt.Println("get jxjh id null")
 	}
 	this.Data["planId"] = planId
-	o := orm.NewOrm()
-	rw := new(models.Jxrw)
-	var rw_info models.Jxrw
-	err := o.QueryTable(rw).Filter("PlanId", planId).One(&rw_info)
-	if err == nil {
-		courseId = rw_info.CourseId
-	} else {
-		fmt.Println("get courseId err")
-	}
-	if courseId != "" {
-		var kc_info models.Jxkc
-		kc := new(models.Jxkc)
-		err := o.QueryTable(kc).Filter("CourseId", courseId).One(&kc_info)
-		if err != nil {
-			fmt.Println("get jxkc info err", err.Error())
-		}
-		this.Data["CourseId"] = courseId
-		this.Data["CourseName"] = kc_info.CourseName
-	}
 	this.TplName = "jxjh_jhkc_allot.tpl"
 }
 
@@ -292,4 +272,43 @@ func (this *JxjhController) Jhkclook() {
 	}
 	this.Data["m"] = maps
 	this.TplName = "jxrw_kc_look.tpl"
+}
+func (this *JxjhController) JxrwTeacherAllotGet() {
+	planId := this.GetString("planId")
+	if planId == "" {
+		fmt.Println("get jxjh id null")
+	}
+	this.Data["planId"] = planId
+	this.TplName = "jxrw_teacher_allot.tpl"
+}
+
+func (this *JxjhController) JxrwTeacherAdd() {
+	this.TplName = "jxrw_teacher_add.tpl"
+}
+
+func (this *JxjhController) JxrwTeacherAllotSave() {
+	fmt.Println("add course")
+	o := orm.NewOrm()
+	var jxrw models.Jxrw_teacher_allot
+	json.Unmarshal(this.Ctx.Input.RequestBody, &jxrw)
+	//TeacherId
+	if jxrw.TeacherId == "" {
+		fmt.Println("TeacherId is null")
+		this.ajaxMsg("TeacherId is null", MSG_ERR_Param)
+	}
+	//planid
+	if jxrw.PlanId == "" {
+		fmt.Println("planId is null")
+		this.ajaxMsg("planId is null", MSG_ERR_Param)
+	}
+	list := make(map[string]interface{})
+	jxrw.Status = "已分配"
+	_, err := o.Insert(&jxrw)
+	if err != nil {
+		fmt.Printf("insert err", err.Error())
+		this.ajaxMsg("insert err", MSG_ERR_Resources)
+	}
+	list["id"] = jxrw.Id
+	this.ajaxList("add success", MSG_OK, 1, list)
+	return
 }

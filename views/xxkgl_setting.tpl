@@ -21,25 +21,25 @@ body{padding: 10px;}
   <div class="layui-form-item">
 	    <label class="layui-form-label" style="width: auto;">每门选修课最多选课人数</label>
 	    <div class="layui-input-inline" style="width: 150px;">
-	      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
+	      <input type="text" id="PepoleMax" autocomplete="off" class="layui-input">
 	    </div>
   </div>
   <div class="layui-form-item">
 	    <label class="layui-form-label" style="width: auto;">每门选修课班级最多选课人数</label>
 	    <div class="layui-input-inline" style="width: 150px;">
-	      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
+	      <input type="text" id="ClassPepopleMax" autocomplete="off" class="layui-input">
 	    </div> 
   </div>
   <div class="layui-form-item">
 	    <label class="layui-form-label" style="width: auto;">女生最大选课数</label>
 	    <div class="layui-input-inline" style="width: 150px;">
-	      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
+	      <input type="text" id="WomenMax" autocomplete="off" class="layui-input">
 	    </div>
   </div>
   <div class="layui-form-item">
 	    <label class="layui-form-label" style="width: auto;">男生最大选课数</label>
 	    <div class="layui-input-inline" style="width: 150px;">
-	      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
+	      <input type="text" id="ManMax" autocomplete="off" class="layui-input">
 	    </div>  
   </div>
   <div class="layui-form-item">
@@ -61,27 +61,35 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
   ,element=layui.element
   ,table=layui.table
   ,laytpl = layui.laytpl;
-	//自动加载
-	$(function(){
-				
-	});	
- 
-	$('#setting').on('click',function(){
-		//alert("点击查询")
-		var major=$("#Major").val()
-		var grade=$("#PlanGrade").val()
-		var classs=$("#PlanClass").val()
-		var planId=$("#PlanId").val()
-		table.reload('listReload',{
-			where:{
-				major:major,
-				grade:grade,
-				class:classs,
-				planId:planId,
-			}
-		})		
+	//自动加载	
+	
+	$('#save').on('click',function(){
+		var data={
+			'PepoleMax':parseInt($("#PepoleMax").val()),
+			'ClassPepopleMax':parseInt($("#ClassPepopleMax").val()),
+			'WomenMax':parseInt($("#WomenMax").val()),
+			'ManMax':parseInt($("#ManMax").val())
+			};
+		$.ajax({
+					type:"POST",
+					contentType:"application/json;charset=utf-8",
+					url:"/v1/xxkgl/setting/add",
+					data:JSON.stringify(data),
+					async:false,
+					error:function(request){
+						alert("post error")						
+					},
+					success:function(res){
+						if(res.code==200){
+							alert("保存成功")	
+						}else{
+							alert("保存失败")
+						}						
+					}
+			  	});		
 		return false;
 	})
+	
 });
 </script>
 

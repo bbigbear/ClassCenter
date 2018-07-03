@@ -104,13 +104,14 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 	    //,page: true //开启分页
 		,id: 'listReload'
 	    ,cols: [[   
-	      {field:'PlanId', title:'计划编号', width:120}
-		  ,{field:'Major',  title:'计划专业', width:120}
-	      ,{field:'PlanGrade',  title:'计划年级', width:120}
-		  ,{field:'PlanClass',  title:'计划班级', width:120}
-		  ,{field:'TotalCredits',  title:'总学分要求', width:120}
-		  ,{field:'ApplyTime',  title:'申请日期', width:120}
-		  ,{field:'Status',  title:'进度', width:120}
+	      {field:'PlanId', title:'申请人', width:120}
+		  ,{field:'Major',  title:'申请日期', width:120}
+	      ,{field:'PlanGrade',  title:'开课课程号', width:120}
+		  ,{field:'PlanClass',  title:'开课课程', width:120}
+		  ,{field:'TotalCredits',  title:'开课年级', width:120}
+		  ,{field:'ApplyTime',  title:'周课时', width:120}
+		  ,{field:'ApplyTime',  title:'适用性别', width:120}
+		  ,{field:'Status',  title:'状态', width:120}
 		  ,{fixed: 'right', title:'操作',width:80, align:'center', toolbar: '#barDemo'}
 	    ]]
 	  });

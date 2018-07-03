@@ -27,6 +27,9 @@ func init() {
 	beego.Router("/v1/jxjh/jxkc/allot", &controllers.JxjhController{}, "*:JhkcAllotGet")
 	beego.Router("/v1/jxjh/jxkc/allot_save", &controllers.JxjhController{}, "post:JhkcAllotSave")
 	beego.Router("/v1/jxjh/jxkc/add", &controllers.JxjhController{}, "*:JhkcAdd")
+	beego.Router("/v1/jxjh/jxrw/teacher_allot", &controllers.JxjhController{}, "*:JxrwTeacherAllotGet")
+	beego.Router("/v1/jxjh/jxrw/teacher_allot_save", &controllers.JxjhController{}, "post:JxrwTeacherAllotSave")
+	beego.Router("/v1/jxjh/jxrw/teacher_add", &controllers.JxjhController{}, "*:JxrwTeacherAdd")
 	beego.Router("/v1/jxjh/add", &controllers.JxjhController{}, "*:Add")
 	beego.Router("/v1/jxjh/add_action", &controllers.JxjhController{}, "post:AddAction")
 	beego.Router("/v1/jxjh/getdata", &controllers.JxjhController{}, "Get:GetData")
@@ -51,7 +54,13 @@ func init() {
 	beego.Router("/v1/sksj/compulsory", &controllers.SksjController{}, "*:CompulsoryGet")
 	//xxkgl
 	beego.Router("/v1/xxkgl/setting", &controllers.XxkglController{}, "*:SettingGet")
+	beego.Router("/v1/xxkgl/setting/add", &controllers.XxkglController{}, "post:AddSetting")
 	beego.Router("/v1/xxkgl/task", &controllers.XxkglController{}, "*:TaskGet")
+	beego.Router("/v1/xxkgl/task/add", &controllers.XxkglController{}, "*:TaskAddGet")
+	beego.Router("/v1/xxkgl/task/add_action", &controllers.XxkglController{}, "post:AddAction")
+	beego.Router("/v1/xxkgl/task/edit", &controllers.XxkglController{}, "*:Edit")
+	beego.Router("/v1/xxkgl/task/edit_action", &controllers.XxkglController{}, "*:EditAction")
+	beego.Router("/v1/xxkgl/task/getdata", &controllers.XxkglController{}, "*:GetData")
 	beego.Router("/v1/xxkgl/apply", &controllers.XxkglController{}, "*:ApplyGet")
 	beego.Router("/v1/xxkgl/approve", &controllers.XxkglController{}, "*:ApproveGet")
 	//kbgl

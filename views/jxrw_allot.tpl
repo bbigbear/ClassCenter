@@ -97,8 +97,8 @@ body{padding: 10px;}
 
 	<table id="list" lay-filter="announcement" style="width:auto;"></table>
 	<script type="text/html" id="barDemo">
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del">删除</a>
+<!--		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>-->
+<!--		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del">删除</a>-->
 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="allot">分配任务</a>
 	</script>
 <script src="/static/layui.js"></script>
@@ -130,7 +130,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		  ,{field:'Major',  title:'计划专业', width:120}
 	      ,{field:'PlanGrade',  title:'计划年级', width:120}
 		  ,{field:'PlanClass',  title:'计划班级', width:120}
-		  ,{field:'TotalCredits',  title:'总学分要求', width:120}
+		  ,{field:'TotalCredits',  title:'教学教师', width:120}
 		  ,{field:'ApplyTime',  title:'申请日期', width:120}
 		  ,{field:'Status',  title:'进度', width:120}
 		  ,{fixed: 'right', title:'操作',width:200, align:'center', toolbar: '#barDemo'}
@@ -140,11 +140,11 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		table.on('tool(announcement)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 		    var data = obj.data //获得当前行数据
 		    ,layEvent = obj.event; //获得 lay-event 对应的值
-		    if(layEvent === 'edit'){
+		    if(layEvent === 'allot'){
 		      //layer.msg('查看操作');		
 				  layer.open({
 				  type: 2,
-				  title: '编辑计划',
+				  title: '分配任务',
 				  //closeBtn: 0, //不显示关闭按钮
 				  shadeClose: true,
 				  shade: false,
@@ -153,16 +153,14 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 				  //time: 2000, //2秒后自动关闭
 				  maxmin: true,
 				  anim: 2,
-				  content: ['/v1/jxjh/edit?id='+data.Id], //iframe的url，no代表不显示滚动条
+				  content: ['/v1/jxjh/jxrw/teacher_allot?planId='+data.PlanId], //iframe的url，no代表不显示滚动条
 				  cancel: function(index, layero){			  
 					layer.close(index)
 					window.location.reload();
 				  	return false; 
 				  },
 				});
-	    	}else if(layEvent === 'allot'){
-		      layer.msg('分配计划课程');
-		    }
+	    	}
 	  });
   
 	$('#query').on('click',function(){

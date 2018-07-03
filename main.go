@@ -41,5 +41,7 @@ func DBConnection() {
 	orm.RegisterDataBase("default", "mysql", sql, maxIdleConns, maxOpenConns)
 }
 func RegisterModel() {
-	orm.RegisterModel(new(models.Jxkc), new(models.Jxjh), new(models.Jxrw))
+	orm.RegisterModel(new(models.Jxkc), new(models.Jxjh),
+		new(models.Jxrw), new(models.Jxrw_teacher_allot),
+		new(models.XkSetting), new(models.Xkrw))
 }
