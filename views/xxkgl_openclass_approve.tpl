@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>开课审批</title>
+  <title>开课审核</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -17,58 +17,19 @@ body{padding: 10px;}
 </style>
 </head>
 <body>
-<form class="layui-form layui-form-pane1" action="">
+<form class="layui-form layui-form-pane1" action=""> 
   <div class="layui-form-item">
   <div class="layui-inline">
-    <label class="layui-form-label">所属专业</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="Major" id="Major" lay-filter="status_select">
-		    <option value="专业名称" > 专业名称</option>
-			<option value="计算机软件" > 计算机软件</option>
-			<option value="物流服务与管理" > 物流服务与管理</option>
-			<option value="市场营销" > 市场营销</option>
-			<option value="计算机应用" > 计算机应用</option>
-			<option value="电子商务" > 电子商务</option>
-			<option value="信息管理" > 信息管理</option>
-			<option value="电气自动化" > 电气自动化</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">计划年级</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanGrade" id="PlanGrade" lay-filter="status_select">
-		    <option value="2018" > 2018</option>
-			<option value="2017" > 2017</option>
-			<option value="2016" > 2016</option>
-			<option value="2015" > 2015</option>
-      </select>
-    </div>
-  </div>
-  <div>
-  <div class="layui-form-item">
-  <div class="layui-inline">
-    <label class="layui-form-label">班级</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanClass" id="PlanClass" lay-filter="status_select">
-		    <option value="1" > 1</option>
-			<option value="2" > 2</option>
-			<option value="3" > 3</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">计划编号</label>
+    <label class="layui-form-label">课程名称</label>
     <div class="layui-input-inline" style="width: 150px;">
       <input type="text" id="PlanId" autocomplete="off" class="layui-input">
     </div>
   </div>
-  <div>
+  </div>
   <div class="layui-form-item">
     <div class="layui-inline layui-layout-right" style="padding:10px;">
     	<button class="layui-btn" id="query">查询</button>
 		<button class="layui-btn" id="clear">清除条件</button>
-<!--		<button class="layui-btn" id="add">新建计划</button>-->
   	</div>
   </div>
 </form>
@@ -77,8 +38,6 @@ body{padding: 10px;}
 
 	<table id="list" lay-filter="announcement" style="width:auto;"></table>
 	<script type="text/html" id="barDemo">
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">查看</a>
-		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit_plan">查看计划课程</a>
 		{{#  if(d.Status =="未审核"){ }}
 			<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="yes">通过</a>
 			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="no">驳回</a>
@@ -105,18 +64,19 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 	  table.render({
 	    elem: '#list'
 	    ,height: 315
-	    ,url: '/v1/jxjh/getdata'//数据接口
+	    ,url: '/v1/xxkgl/openclass/getdata'//数据接口
 	    //,page: true //开启分页
 		,id: 'listReload'
 	    ,cols: [[   
-	      {field:'PlanId', title:'计划编号', width:120}
-		  ,{field:'Major',  title:'计划专业', width:120}
-	      ,{field:'PlanGrade',  title:'计划年级', width:120}
-		  ,{field:'PlanClass',  title:'计划班级', width:120}
-		  ,{field:'TotalCredits',  title:'总学分要求', width:120}
-		  ,{field:'ApplyTime',  title:'申请日期', width:120}
-		  ,{field:'Status',  title:'进度', width:120}
-		  ,{fixed: 'right', title:'操作',width:250, align:'center', toolbar: '#barDemo'}
+	      {field:'Applicant', title:'申请人', width:120}
+		  ,{field:'StartTime',  title:'申请日期', width:120}
+	      ,{field:'CourseId',  title:'开课课程号', width:120}
+		  ,{field:'CourseName',  title:'开课课程', width:120}
+		  ,{field:'Year',  title:'开课年级', width:120}
+		  ,{field:'WeekTime',  title:'周课时', width:120}
+		  ,{field:'Sex',  title:'适用性别', width:120}
+		  ,{field:'Status',  title:'状态', width:120}
+		  ,{fixed: 'right', title:'操作',width:120, align:'center', toolbar: '#barDemo'}
 	    ]]
 	  });
 	//监听工具条
@@ -125,30 +85,28 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		    ,layEvent = obj.event; //获得 lay-event 对应的值
 		    if(layEvent === 'edit'){
 		      //layer.msg('查看操作');		
-				  layer.open({
-				  type: 2,
-				  title: '查看计划',
-				  //closeBtn: 0, //不显示关闭按钮
-				  shadeClose: true,
-				  shade: false,
-				  area: ['893px', '600px'],
-				 // offset: 'rb', //右下角弹出
-				  //time: 2000, //2秒后自动关闭
-				  maxmin: true,
-				  anim: 2,
-				  content: ['/v1/jxjh/look?id='+data.Id], //iframe的url，no代表不显示滚动条
-				  cancel: function(index, layero){			  
-					layer.close(index)
-					window.location.reload();
-				  	return false; 
-				  },
-				});
-	    	}else if(layEvent === 'edit_plan'){
-				layer.msg('待完成');
-			}else if(layEvent === 'yes'){
+			  layer.open({
+			  type: 2,
+			  title: '查看课程',
+			  //closeBtn: 0, //不显示关闭按钮
+			  shadeClose: true,
+			  shade: false,
+			  area: ['893px', '600px'],
+			 // offset: 'rb', //右下角弹出
+			  //time: 2000, //2秒后自动关闭
+			  maxmin: true,
+			  anim: 2,
+			  content: ['/v1/jxjh/look?id='+data.Id], //iframe的url，no代表不显示滚动条
+			  cancel: function(index, layero){			  
+				layer.close(index)
+				window.location.reload();
+			  	return false; 
+			  },
+		});
+	    }else if(layEvent === 'yes'){
 				layer.confirm('真的通过？', function(index){
 		        var jsData={'id':data.Id,'status':"已通过"}
-				$.post('/v1/jxjh/change', jsData, function (out) {
+				$.post('/v1/xxkgl/openclass/change', jsData, function (out) {
 	                if (out.code == 200) {
 	                    layer.alert('已通过', {icon: 1},function(index){
 	                        layer.close(index);
@@ -163,7 +121,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 			}else if(layEvent === 'no'){
 				layer.confirm('真的驳回？', function(index){
 		        var jsData={'id':data.Id,'status':"未通过"}
-				$.post('/v1/jxjh/change', jsData, function (out) {
+				$.post('/v1/xxkgl/openclass/change', jsData, function (out) {
 	                if (out.code == 200) {
 	                    layer.alert('驳回成功了', {icon: 1},function(index){
 	                        layer.close(index);
@@ -177,6 +135,23 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		      });
 			}
 	  });
+  
+	$('#add').on('click',function(){
+		layer.open({
+			  type: 2,
+			  title: '新增申请',
+			  //closeBtn: 0, //不显示关闭按钮
+			  shadeClose: true,
+			  shade: false,
+			  area: ['893px', '600px'],
+			 // offset: 'rb', //右下角弹出
+			  //time: 2000, //2秒后自动关闭
+			  maxmin: true,
+			  anim: 2,
+			  content: ['/v1/xxkgl/openclass_add'], //iframe的url，no代表不显示滚动条
+		});
+		return false;
+	});
 	
 	$('#query').on('click',function(){
 		//alert("点击查询")
@@ -191,7 +166,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 				class:classs,
 				planId:planId,
 			}
-		})		
+		})
 		return false;
 	})
 });

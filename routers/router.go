@@ -52,6 +52,10 @@ func init() {
 	//sksj
 	beego.Router("/v1/sksj/eletive", &controllers.SksjController{}, "*:EletiveGet")
 	beego.Router("/v1/sksj/compulsory", &controllers.SksjController{}, "*:CompulsoryGet")
+	beego.Router("/v1/sksj/getdata", &controllers.SksjController{}, "*:GetData")
+	beego.Router("/v1/sksj/edit", &controllers.SksjController{}, "*:Edit")
+	beego.Router("/v1/sksj/edit_action", &controllers.SksjController{}, "post:EditAction")
+	beego.Router("/v1/sksj/save", &controllers.SksjController{}, "*:Save")
 	//xxkgl
 	beego.Router("/v1/xxkgl/setting", &controllers.XxkglController{}, "*:SettingGet")
 	beego.Router("/v1/xxkgl/setting/add", &controllers.XxkglController{}, "post:AddSetting")
@@ -62,6 +66,10 @@ func init() {
 	beego.Router("/v1/xxkgl/task/edit_action", &controllers.XxkglController{}, "*:EditAction")
 	beego.Router("/v1/xxkgl/task/getdata", &controllers.XxkglController{}, "*:GetData")
 	beego.Router("/v1/xxkgl/apply", &controllers.XxkglController{}, "*:ApplyGet")
+	beego.Router("/v1/xxkgl/openclass_add", &controllers.XxkglController{}, "*:OpenClassAdd")
+	beego.Router("/v1/xxkgl/openclass_add_action", &controllers.XxkglController{}, "post:OpenClassAddAction")
+	beego.Router("/v1/xxkgl/openclass/getdata", &controllers.XxkglController{}, "*:OpenClassGetData")
+	beego.Router("/v1/xxkgl/openclass/change", &controllers.XxkglController{}, "*:OpenClassChangeStatus")
 	beego.Router("/v1/xxkgl/approve", &controllers.XxkglController{}, "*:ApproveGet")
 	//kbgl
 	beego.Router("/v1/kbgl/classroom", &controllers.KbglController{}, "*:ClassRoomGet")

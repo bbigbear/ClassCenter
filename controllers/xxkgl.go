@@ -125,6 +125,71 @@ func (this *XxkglController) OpenClassAdd() {
 	this.TplName = "xxkgl_openclass_add.tpl"
 }
 
+func (this *XxkglController) OpenClassAddAction() {
+	fmt.Println("add openclass apply")
+	o := orm.NewOrm()
+	list := make(map[string]interface{})
+	var kksq models.Kksq
+	json.Unmarshal(this.Ctx.Input.RequestBody, &kksq)
+
+	fmt.Println("kksq_info:", &kksq)
+
+	//insert
+	kksq.Status = "未审核"
+	_, err1 := o.Insert(&kksq)
+	if err1 != nil {
+		fmt.Printf("insert err", err1.Error())
+		this.ajaxMsg("insert err", MSG_ERR_Resources)
+	}
+	list["Id"] = kksq.Id
+	this.ajaxList("add success", MSG_OK, 1, list)
+	return
+}
+func (this *XxkglController) OpenClassGetData() {
+	fmt.Println("get kksq data")
+	o := orm.NewOrm()
+	var maps []orm.Params
+	kksq := new(models.Kksq)
+	query := o.QueryTable(kksq)
+	//get data dB
+	num, err := query.Values(&maps)
+	if err != nil {
+		fmt.Println("get kksq err", err.Error())
+		this.ajaxMsg("get kksq err", MSG_ERR_Resources)
+	}
+	fmt.Println("get kksq reslut num:", num)
+	this.ajaxList("get kksq data success", 0, num, maps)
+	return
+}
+
+func (this *XxkglController) OpenClassChangeStatus() {
+	fmt.Println("change status")
+	//id
+	id, err := this.GetInt("id")
+	if err != nil {
+		fmt.Println("get id err", err.Error())
+		this.ajaxMsg("get id err", MSG_ERR_Param)
+	}
+	fmt.Println("id:", id)
+	//status
+	status := this.GetString("status")
+	fmt.Println("status is", status)
+
+	o := orm.NewOrm()
+	kksq := new(models.Kksq)
+	//updata status db
+	num, err := o.QueryTable(kksq).Filter("Id", id).Update(orm.Params{
+		"Status": status,
+	})
+	if err != nil {
+		fmt.Println("change status err", err.Error())
+		this.ajaxMsg("change status err", MSG_ERR_Resources)
+	}
+	fmt.Println("num", num)
+	this.ajaxMsg("update status success", MSG_OK)
+	return
+}
+
 func (this *XxkglController) ApproveGet() {
 	this.TplName = "xxkgl_openclass_approve.tpl"
 }

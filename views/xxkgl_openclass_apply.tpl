@@ -17,38 +17,16 @@ body{padding: 10px;}
 </style>
 </head>
 <body>
-<form class="layui-form layui-form-pane1" action="">
+<form class="layui-form layui-form-pane1" action=""> 
   <div class="layui-form-item">
   <div class="layui-inline">
-    <label class="layui-form-label">所属专业</label>
+    <label class="layui-form-label">课程名称</label>
     <div class="layui-input-inline" style="width: 150px;">
-      <select name="Major" id="Major" lay-filter="status_select">
-		    <option value="专业名称" > 专业名称</option>
-			<option value="计算机软件" > 计算机软件</option>
-			<option value="物流服务与管理" > 物流服务与管理</option>
-			<option value="市场营销" > 市场营销</option>
-			<option value="计算机应用" > 计算机应用</option>
-			<option value="电子商务" > 电子商务</option>
-			<option value="信息管理" > 信息管理</option>
-			<option value="电气自动化" > 电气自动化</option>
-      </select>
+      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
     </div>
   </div>
   <div class="layui-inline">
-    <label class="layui-form-label">计划年级</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <select name="PlanGrade" id="PlanGrade" lay-filter="status_select">
-		    <option value="2018" > 2018</option>
-			<option value="2017" > 2017</option>
-			<option value="2016" > 2016</option>
-			<option value="2015" > 2015</option>
-      </select>
-    </div>
-  </div>
-  <div>
-  <div class="layui-form-item">
-  <div class="layui-inline">
-    <label class="layui-form-label">班级</label>
+    <label class="layui-form-label">开课班级</label>
     <div class="layui-input-inline" style="width: 150px;">
       <select name="PlanClass" id="PlanClass" lay-filter="status_select">
 		    <option value="1" > 1</option>
@@ -57,13 +35,7 @@ body{padding: 10px;}
       </select>
     </div>
   </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">计划编号</label>
-    <div class="layui-input-inline" style="width: 150px;">
-      <input type="text" id="PlanId" autocomplete="off" class="layui-input">
-    </div>
   </div>
-  <div>
   <div class="layui-form-item">
     <div class="layui-inline layui-layout-right" style="padding:10px;">
     	<button class="layui-btn" id="query">查询</button>
@@ -100,17 +72,17 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 	  table.render({
 	    elem: '#list'
 	    ,height: 315
-	    ,url: '/v1/jxjh/getdata'//数据接口
+	    ,url: '/v1/xxkgl/openclass/getdata'//数据接口
 	    //,page: true //开启分页
 		,id: 'listReload'
 	    ,cols: [[   
-	      {field:'PlanId', title:'申请人', width:120}
-		  ,{field:'Major',  title:'申请日期', width:120}
-	      ,{field:'PlanGrade',  title:'开课课程号', width:120}
-		  ,{field:'PlanClass',  title:'开课课程', width:120}
-		  ,{field:'TotalCredits',  title:'开课年级', width:120}
-		  ,{field:'ApplyTime',  title:'周课时', width:120}
-		  ,{field:'ApplyTime',  title:'适用性别', width:120}
+	      {field:'Applicant', title:'申请人', width:120}
+		  ,{field:'StartTime',  title:'申请日期', width:120}
+	      ,{field:'CourseId',  title:'开课课程号', width:120}
+		  ,{field:'CourseName',  title:'开课课程', width:120}
+		  ,{field:'Year',  title:'开课年级', width:120}
+		  ,{field:'WeekTime',  title:'周课时', width:120}
+		  ,{field:'Sex',  title:'适用性别', width:120}
 		  ,{field:'Status',  title:'状态', width:120}
 		  ,{fixed: 'right', title:'操作',width:80, align:'center', toolbar: '#barDemo'}
 	    ]]
@@ -145,7 +117,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 	$('#add').on('click',function(){
 		layer.open({
 			  type: 2,
-			  title: '新建计划',
+			  title: '新增申请',
 			  //closeBtn: 0, //不显示关闭按钮
 			  shadeClose: true,
 			  shade: false,
@@ -154,7 +126,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 			  //time: 2000, //2秒后自动关闭
 			  maxmin: true,
 			  anim: 2,
-			  content: ['/v1/jxjh/add'], //iframe的url，no代表不显示滚动条
+			  content: ['/v1/xxkgl/openclass_add'], //iframe的url，no代表不显示滚动条
 		});
 		return false;
 	});
