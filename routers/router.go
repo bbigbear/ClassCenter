@@ -45,6 +45,7 @@ func init() {
 	beego.Router("/v1/jxrw/check", &controllers.JxjhController{}, "*:JxrwCheckGet")
 	//pkgl
 	beego.Router("/v1/pkgl/setting", &controllers.PkglController{}, "*:SettingGet")
+	beego.Router("/v1/pkgl/setting/save", &controllers.PkglController{}, "post:SettingSave")
 	beego.Router("/v1/pkgl/classroom", &controllers.PkglController{}, "*:ClassRoomUnarrangingTimeGet")
 	beego.Router("/v1/pkgl/teacher", &controllers.PkglController{}, "*:TeacherUnarrangingTimeGet")
 	beego.Router("/v1/pkgl/eletive", &controllers.PkglController{}, "*:EletivePkGet")
@@ -75,5 +76,13 @@ func init() {
 	beego.Router("/v1/kbgl/classroom", &controllers.KbglController{}, "*:ClassRoomGet")
 	beego.Router("/v1/kbgl/teacher", &controllers.KbglController{}, "*:TeacherGet")
 	beego.Router("/v1/kbgl/teachingclass", &controllers.KbglController{}, "*:TeachingClassGet")
+	//jsbk
+	beego.Router("/v1/jsbk/case", &controllers.JsbkController{}, "*:CaseGet")
+	beego.Router("/v1/jsbk/case/add", &controllers.JsbkController{}, "*:CaseAdd")
+	beego.Router("/v1/jsbk/group", &controllers.JsbkController{}, "*:TeachGroup")
+	beego.Router("/v1/jsbk/case/approve", &controllers.JsbkController{}, "*:TeachCaseApprove")
+	beego.Router("/v1/jsbk/case/query", &controllers.JsbkController{}, "*:TeachCaseQuery")
+	beego.Router("/v1/jsbk/time_manage", &controllers.JsbkController{}, "*:TimeManage")
+	beego.Router("/v1/jsbk/schedule", &controllers.JsbkController{}, "*:TeachSchedule")
 
 }
