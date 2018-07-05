@@ -8,6 +8,8 @@ import (
 
 func init() {
 	beego.Router("/", &controllers.MainController{})
+	beego.Router("/v1/put_file", &controllers.BaseController{}, "*:PutFile")
+	beego.Router("/v1/put_dbf_file", &controllers.BaseController{}, "*:PutDbf")
 	//jxkc
 	beego.Router("/v1/jxkc/apply", &controllers.JxkcController{}, "*:ApplyGet")
 	beego.Router("/v1/jxkc/check", &controllers.JxkcController{}, "*:CheckGet")
@@ -79,6 +81,8 @@ func init() {
 	//jsbk
 	beego.Router("/v1/jsbk/case", &controllers.JsbkController{}, "*:CaseGet")
 	beego.Router("/v1/jsbk/case/add", &controllers.JsbkController{}, "*:CaseAdd")
+	beego.Router("/v1/jsbk/case/add_action", &controllers.JsbkController{}, "post:CaseAddAction")
+	beego.Router("/v1/jsbk/case/getdata", &controllers.JsbkController{}, "*:CaseGetData")
 	beego.Router("/v1/jsbk/group", &controllers.JsbkController{}, "*:TeachGroup")
 	beego.Router("/v1/jsbk/case/approve", &controllers.JsbkController{}, "*:TeachCaseApprove")
 	beego.Router("/v1/jsbk/case/query", &controllers.JsbkController{}, "*:TeachCaseQuery")

@@ -21,6 +21,40 @@ func (this *JsbkController) CaseAdd() {
 	this.TplName = "jsbk_teachcase_add.tpl"
 }
 
+func (this *JsbkController) CaseAddAction() {
+	fmt.Println("add case")
+	o := orm.NewOrm()
+	list := make(map[string]interface{})
+	var cases models.Case
+	json.Unmarshal(this.Ctx.Input.RequestBody, &cases)
+
+	fmt.Println("case_info:", &cases)
+	cases.Status = "未审核"
+	//insert
+	_, err1 := o.Insert(&cases)
+	if err1 != nil {
+		fmt.Printf("insert err", err1.Error())
+		this.ajaxMsg("insert err", MSG_ERR_Resources)
+	}
+	list["caseId"] = cases.Id
+	this.ajaxList("add success", MSG_OK, 1, list)
+	return
+}
+
+func (this *JsbkController) CaseGetData() {
+	o := orm.NewOrm()
+	var maps []orm.Params
+	cases := new(models.Case)
+	num, err := o.QueryTable(cases).Values(&maps)
+	if err != nil {
+		fmt.Println("get case err", err.Error())
+		this.ajaxMsg("get case err", MSG_ERR_Resources)
+	}
+	fmt.Println("get case reslut num:", num)
+	this.ajaxList("get case data success", 0, num, maps)
+	return
+}
+
 func (this *JsbkController) TeachGroup() {
 	this.TplName = "jsbk_teachgroup.tpl"
 }

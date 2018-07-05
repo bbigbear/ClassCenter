@@ -14,6 +14,7 @@ import (
 	//"crypto/rand"
 	"math/rand"
 
+	"github.com/LindsayBradford/go-dbf/godbf"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"
 )
@@ -72,13 +73,13 @@ func (this *BaseController) RemoveRepBySlice(slc []string) []string {
 }
 
 // 图片接口
-func (this *BaseController) PutFileImg() {
+func (this *BaseController) PutFile() {
 	h, err := this.GetFiles("file")
 	fmt.Println("文件名称", h[0].Filename)
 	fmt.Println("文件大小", h[0].Size)
 	if err != nil {
 		log.Fatal("getfile err ", err)
-		this.ajaxMsg(h[0].Filename+"图片上传失败", MSG_ERR_Resources)
+		this.ajaxMsg(h[0].Filename+"文件上传失败", MSG_ERR_Resources)
 	}
 	//	defer f.Close()
 	path := "static/upload/" + h[0].Filename
@@ -87,7 +88,29 @@ func (this *BaseController) PutFileImg() {
 	list["src"] = path
 	list["name"] = h[0].Filename
 	list["size"] = h[0].Size
-	this.ajaxList("图片上传成功", MSG_OK, 1, list)
+	this.ajaxList("文件上传成功", MSG_OK, 1, list)
+}
+
+// 图片接口
+func (this *BaseController) PutDbf() {
+	h, err := this.GetFiles("file")
+	fmt.Println("文件名称", h[0].Filename)
+	fmt.Println("文件大小", h[0].Size)
+	if err != nil {
+		log.Fatal("getfile err ", err)
+		this.ajaxMsg(h[0].Filename+"文件上传失败", MSG_ERR_Resources)
+	}
+	//	defer f.Close()
+	path := "static/upload/" + h[0].Filename
+	this.SaveToFile("file", path) // 保存位置在 static/upload, 没有文件夹要先创建
+	dbfTable, err := godbf.NewFromFile(path, "UTF8")
+	if err != nil {
+		fmt.Println("dbf err", err.Error())
+	}
+	list := make(map[string]interface{})
+	list["src"] = dbfTable
+	list["num"] = dbfTable.NumberOfRecords()
+	this.ajaxList("文件上传成功", MSG_OK, 1, list)
 }
 
 //将时间化为秒

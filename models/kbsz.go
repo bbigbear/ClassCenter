@@ -1,5 +1,6 @@
 package models
 
+//style 0 选修1 必修2 教师3教室
 type Kbsz struct {
 	Id        int64
 	Name      string
@@ -13,6 +14,8 @@ type Kbsz struct {
 	Sat       string
 	Sun       string
 	Style     int
+	TeacherId string
+	ClassId   string
 }
 
 type KbszSetting struct {

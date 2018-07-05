@@ -164,10 +164,10 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 	function uploadData(){
 		var Year=$("#Year").val()
 		var data={
-			'Course':$("#Course").val(),
+			'CourseName':$("#CourseName").val(),
 			'CaseName':$("#CaseName").val(),
 			'Year':Year,
-			'path':path
+			'Path':path
 			};
 			console.log(data)
 			if(Year=="请选择"){
@@ -177,7 +177,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 				$.ajax({
 					type:"POST",
 					contentType:"application/json;charset=utf-8",
-					url:"/v1/xxkgl/openclass_add_action",
+					url:"/v1/jsbk/case/add_action",
 					data:JSON.stringify(data),
 					async:false,
 					error:function(request){

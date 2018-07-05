@@ -6,4 +6,5 @@ type Case struct {
 	Year       string
 	CourseName string
 	Path       string
+	Status     string
 }

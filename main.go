@@ -44,5 +44,6 @@ func RegisterModel() {
 	orm.RegisterModel(new(models.Jxkc), new(models.Jxjh),
 		new(models.Jxrw), new(models.Jxrw_teacher_allot),
 		new(models.XkSetting), new(models.Xkrw), new(models.Kksq),
-		new(models.Kbsz), new(models.KbszSetting), new(models.PkSetting))
+		new(models.Kbsz), new(models.KbszSetting), new(models.PkSetting),
+		new(models.Case))
 }

@@ -72,7 +72,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 	  table.render({
 	    elem: '#list'
 	    ,height: 315
-	    ,url: '/v1/sksj/getdata?style=1'//数据接口
+	    ,url: '/v1/sksj/getdata?style=2'//数据接口
 	    //,page: true //开启分页
 		,id: 'listReload'
 	    ,cols: [[   
