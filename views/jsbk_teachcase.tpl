@@ -73,6 +73,7 @@ body{padding: 10px;}
 	<table id="list" lay-filter="announcement" style="width:auto;"></table>
 	<script type="text/html" id="barDemo">
 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">查看</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 	</script>
 <script src="/static/layui.js"></script>
 <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
@@ -103,7 +104,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		  ,{field:'Year',  title:'学期', width:120}
 	      ,{field:'CourseName',  title:'课程', width:120}
 		  ,{field:'Status',  title:'教案状态', width:120}
-		  ,{fixed: 'right', title:'操作',width:80, align:'center', toolbar: '#barDemo'}
+		  ,{fixed: 'right', title:'操作',width:120, align:'center', toolbar: '#barDemo'}
 	    ]]
 	  });
 	//监听工具条
@@ -123,14 +124,31 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 			  //time: 2000, //2秒后自动关闭
 			  maxmin: true,
 			  anim: 2,
-			  content: ['/v1/jxjh/look?id='+data.Id], //iframe的url，no代表不显示滚动条
+			  content: ['/v1/jsbk/case/edit?id='+data.Id], //iframe的url，no代表不显示滚动条
 			  cancel: function(index, layero){			  
 				layer.close(index)
 				window.location.reload();
 			  	return false; 
 			  },
 		});
-	    }
+	    }else if(layEvent === 'del'){
+		      layer.confirm('真的删除行么', function(index){
+		        var jsData={'id':data.Id}
+				$.post('/v1/jsbk/case/del', jsData, function (out) {
+	                if (out.code == 200) {
+	                    layer.alert('删除成功了', {icon: 1},function(index){
+	                        layer.close(index);
+	                        table.reload({});
+	                    });
+	                } else {
+	                    layer.msg(out.message)
+	                }
+	            }, "json");
+				obj.del(); //删除对应行（tr）的DOM结构
+		        layer.close(index);
+		        //向服务端发送删除指令
+		      });
+		    }
 	  });
   
 	$('#add').on('click',function(){

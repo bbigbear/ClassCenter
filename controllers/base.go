@@ -107,8 +107,12 @@ func (this *BaseController) PutDbf() {
 	if err != nil {
 		fmt.Println("dbf err", err.Error())
 	}
+	num, err := dbfTable.DecimalPlacesInField("KSH")
+	if err == nil {
+		fmt.Println("decimalplaces", num)
+	}
 	list := make(map[string]interface{})
-	list["src"] = dbfTable
+	list["name"] = dbfTable.FieldNames()
 	list["num"] = dbfTable.NumberOfRecords()
 	this.ajaxList("文件上传成功", MSG_OK, 1, list)
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>新增申请</title>
+  <title>查看我的教案</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -43,36 +43,27 @@ body{padding: 10px;}
     	</div>
 	</div>
   </div>
-  <div class="layui-form-item">
+ <div class="layui-form-item">
     <div class="layui-upload">
 	<div class="layui-inline">	
-    <label class="layui-form-label">附件</label>
-      <div class="layui-input-inline">
-		  <div style="margin-top:10px;">	    
-	        <i class="layui-icon">&#xe61d;</i><a id="testList">添加附件</a>	
+    <label class="layui-form-label">已存在附件</label>
+      <div class="layui-input-inline" style="width:auto;">
+		  <div class="layui-upload-list">
+		    <table class="layui-table" lay-size="sm">
+		      <thead>
+		        <th>文件名</th>		        
+		        <th>操作</th>
+		      </thead>
+		      <tbody id="demoListed"></tbody>
+		    </table>
 		  </div>     
 	  </div>
     </div>	
 	</div>
-  </div>
- <div class="layui-form-item">
-	<div class="layui-input-block">	
-       <div class="layui-upload-list">
-	    <table class="layui-table" lay-size="sm">
-	      <thead>
-	        <th>文件名</th>
-	        <th>大小</th>
-	        <th>状态</th>
-	        <th>操作</th>
-	      </thead>
-	      <tbody id="demoList"></tbody>
-	    </table>
-	  </div>
-    </div>	
   </div> 
   <div class="layui-form-item">
     <div class="layui-inline layui-layout-right">
-      <button class="layui-btn layui-btn-primary" id="add">保存</button>
+<!--      <button class="layui-btn layui-btn-primary" id="add">保存</button>-->
     </div>
   </div>
 </form>
@@ -91,6 +82,43 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
   , $ = layui.jquery
   ,layedit=layui.layedit
   ,element=layui.element;
+	var id
+	var list=[]
+	var path=""
+	$(function(){
+		[<range .m>]
+			id=[<.Id>]
+			$("#CaseName").val([<.CaseName>])
+			$("#Year").val([<.Year>])
+			$("#CourseName").val([<.CourseName>])	
+			list=[<.Path>].split(',')
+		[<end>]
+		
+		if(list[0]==""){
+			list=[]
+		}		
+		for(var i=0;i<list.length-1;i++){
+			path=path+list[i]+',';
+			var m=list[i].split('/')
+			var tr = $(['<tr>'
+	          ,'<td>'+ m[2] +'</td>'
+	          ,'<td>'
+	            ,'<a href="/'+list[i]+'" download="'+m[2]+'">下载 </a>'
+				//,'<a id="'+i+'"> 删除</a>'
+	          ,'</td>'
+	        ,'</tr>'].join(''));
+			//$('#demo1').append('<img src="'+"/"+list[i]+'" id="'+i+'" style="width:80px;height:80px;padding-left:10px;">')
+			$("#"+i).bind('click',function(){             
+                alert("删除")
+				$(this).remove();
+				console.log("this",$(this)[0].id);
+				console.log("i",i);				
+				delete list[$(this)[0].id]
+            });
+		}
+		$('#demoListed').append(tr);
+		form.render();		
+	})
 	
 	//文本域
 	var index=layedit.build('detail',{
@@ -200,8 +228,7 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 			uploadData()
 		}
 		return false;
-	});
-		
+	});	
 	
 });
 </script>

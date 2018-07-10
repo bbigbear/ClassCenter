@@ -47,7 +47,7 @@ body{padding: 10px;}
     </div>
   </div>
   <div class="layui-inline">
-    <label class="layui-form-label">教师名称</label>
+    <label class="layui-form-label">教案名称</label>
     <div class="layui-input-inline" style="width: 150px;">
       <input type="text" id="PlanId" autocomplete="off" class="layui-input">
     </div>
@@ -66,6 +66,10 @@ body{padding: 10px;}
 	<table id="list" lay-filter="announcement" style="width:auto;"></table>
 	<script type="text/html" id="barDemo">
 		<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">查看</a>
+		{{#  if(d.Status =="未审核"){ }}
+			<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="yes">通过</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="no">驳回</a>
+		{{# } }}
 	</script>
 <script src="/static/layui.js"></script>
 <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
@@ -96,14 +100,14 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 		  ,{field:'Year',  title:'学期', width:120}
 	      ,{field:'CourseName',  title:'课程', width:120}
 		  ,{field:'Status',  title:'教案状态', width:120}
-		  ,{fixed: 'right', title:'操作',width:80, align:'center', toolbar: '#barDemo'}
+		  ,{fixed: 'right', title:'操作',width:150, align:'center', toolbar: '#barDemo'}
 	    ]]
 	  });
 	//监听工具条
 		table.on('tool(announcement)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 		    var data = obj.data //获得当前行数据
 		    ,layEvent = obj.event; //获得 lay-event 对应的值
-		    if(layEvent === 'edit'){
+		if(layEvent === 'edit'){
 		      //layer.msg('查看操作');		
 			  layer.open({
 			  type: 2,
@@ -116,32 +120,45 @@ layui.use(['form','laydate','upload','jquery','layedit','element','table','laytp
 			  //time: 2000, //2秒后自动关闭
 			  maxmin: true,
 			  anim: 2,
-			  content: ['/v1/jxjh/look?id='+data.Id], //iframe的url，no代表不显示滚动条
+			  content: ['/v1/jsbk/case/edit?id='+data.Id], //iframe的url，no代表不显示滚动条
 			  cancel: function(index, layero){			  
 				layer.close(index)
 				window.location.reload();
 			  	return false; 
 			  },
 		});
-	    }
+	    }else if(layEvent === 'yes'){
+				layer.confirm('真的通过？', function(index){
+		        var jsData={'id':data.Id,'status':"已通过"}
+				$.post('/v1/jsbk/case/change', jsData, function (out) {
+	                if (out.code == 200) {
+	                    layer.alert('已通过', {icon: 1},function(index){
+	                        layer.close(index);
+	                        location.reload();
+	                    });
+	                } else {
+	                    layer.msg(out.message)
+	                }
+	            }, "json");
+		        layer.close(index);
+		      });
+			}else if(layEvent === 'no'){
+				layer.confirm('真的驳回？', function(index){
+		        var jsData={'id':data.Id,'status':"未通过"}
+				$.post('/v1/jsbk/case/change', jsData, function (out) {
+	                if (out.code == 200) {
+	                    layer.alert('驳回成功了', {icon: 1},function(index){
+	                        layer.close(index);
+	                        location.reload();
+	                    });
+	                } else {
+	                    layer.msg(out.message)
+	                }
+	            }, "json");
+		        layer.close(index);
+		      });
+			}
 	  });
-  
-	$('#add').on('click',function(){
-		layer.open({
-			  type: 2,
-			  title: '新建计划',
-			  //closeBtn: 0, //不显示关闭按钮
-			  shadeClose: true,
-			  shade: false,
-			  area: ['893px', '600px'],
-			 // offset: 'rb', //右下角弹出
-			  //time: 2000, //2秒后自动关闭
-			  maxmin: true,
-			  anim: 2,
-			  content: ['/v1/jxjh/add'], //iframe的url，no代表不显示滚动条
-		});
-		return false;
-	});
 	
 	$('#query').on('click',function(){
 		//alert("点击查询")
