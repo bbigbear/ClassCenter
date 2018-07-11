@@ -21,7 +21,7 @@ body{padding: 10px;}
 	<label class="layui-form-label">集备标题</label>
 	<div class="layui-inline">			    	
 		<div class="layui-input-inline" style="width: 100px;">
-      		<input type="text" name="GroupName" id="GroupName" autocomplete="off" class="layui-input">
+      		<input type="text" name="Title" id="Title" autocomplete="off" class="layui-input">
     	</div>
 	</div>	
   </div> 
@@ -29,7 +29,7 @@ body{padding: 10px;}
 	<label class="layui-form-label">集备说明</label>
 	<div class="layui-inline">			    	
 		<div class="layui-input-inline" style="width: 100px;">
-      		<input type="text" name="GroupName" id="GroupName" autocomplete="off" class="layui-input">
+      		<input type="text" name="Explain" id="Explain" autocomplete="off" class="layui-input">
     	</div>
 	</div>	
   </div> 
@@ -73,6 +73,15 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
   ,layedit=layui.layedit
   ,element=layui.element;
 	
+	$(function(){
+		[<range .m>]
+			id=[<.Id>]
+			$("#Title").val([<.Title>])
+			$("#Explain").val([<.Explain>])
+			$("#GroupLeader").val([<.Master>])
+			$("#GroupMember").val([<.Participant>])	
+		[<end>]
+	})	
 	//文本域
 	var index=layedit.build('detail',{
 		hideTool:['image','face']
@@ -81,16 +90,17 @@ layui.use(['form','laydate','upload','jquery','layedit','element'], function(){
 	//数据上传
 	function uploadData(){
 		var data={
-			'Name':$("#GroupName").val(),
-			'GroupLeader':$("#GroupLeader").val(),
-			'GroupMember':$("#GroupMember").val()
+			'Title':$("#Title").val(),
+			'Explain':$("#Explain").val(),
+			'Master':$("#GroupLeader").val(),
+			'Participant':$("#GroupMember").val()
 			};
 			console.log(data)	
 				//添加
 				$.ajax({
 					type:"POST",
 					contentType:"application/json;charset=utf-8",
-					url:"/v1/jsbk/group/add_action",
+					url:"/v1/jbgl/plan/edit_action",
 					data:JSON.stringify(data),
 					async:false,
 					error:function(request){

@@ -108,5 +108,12 @@ func init() {
 	beego.Router("/v1/jbgl/plan/edit", &controllers.JbglController{}, "*:Edit")
 	beego.Router("/v1/jbgl/plan/edit_action", &controllers.JbglController{}, "post:EditAction")
 	beego.Router("/v1/jbgl/plan/del", &controllers.JbglController{}, "post:Del")
+	beego.Router("/v1/jbgl/plan/wait", &controllers.JbglController{}, "*:WaitLaunch")
+	beego.Router("/v1/jbgl/plan/launch", &controllers.JbglController{}, "*:Launch")
+	beego.Router("/v1/jbgl/plan/join", &controllers.JbglController{}, "*:Join")
+	beego.Router("/v1/jbgl/plan/view", &controllers.JbglController{}, "*:View")
+	beego.Router("/v1/jbjc/plan/launch", &controllers.JbglController{}, "*:Check")
+	beego.Router("/v1/jbjc/plan/join", &controllers.JbglController{}, "*:CheckJoin")
+	beego.Router("/v1/jbjc/plan/view", &controllers.JbglController{}, "*:CheckView")
 
 }

@@ -90,7 +90,7 @@
 		  <a href="javascript:;">集备管理</a>
 		  <dl class="layui-nav-child">
 			<dd><a href="javascript:;">集备计划维护</a></dd>
-			<dd><a href="javascript:;">带发起的集备</a></dd>
+			<dd><a href="javascript:;">待发起的集备</a></dd>
 			<dd><a href="javascript:;">我发起的集备</a></dd>
 			<dd><a href="javascript:;">我参加的集备</a></dd>
 			<dd><a href="javascript:;">集备成功查看</a></dd>
