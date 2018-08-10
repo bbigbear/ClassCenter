@@ -1,9 +1,10 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 
-	"oa_system/models"
+	"ClassCenter/models"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"
@@ -35,8 +36,10 @@ func (this *LoginController) Get() {
 func (this *LoginController) LoginAction() {
 
 	fmt.Println("点击登录按钮")
-	uname := this.Input().Get("inputAccount")
-	pwd := this.Input().Get("inputPassword")
+	var user models.User
+	json.Unmarshal(this.Ctx.Input.RequestBody, &user)
+	uname := user.Name
+	pwd := user.Pwd
 	fmt.Println("get name&password", uname, pwd)
 
 	//	if beego.AppConfig.String("uname") == uname &&
@@ -71,9 +74,13 @@ func (this *LoginController) LoginAction() {
 			this.ajaxMsg("err to json", MSG_ERR)
 		}
 		if login_info.ReadName == "管理员" {
-			//存session
-			this.SetSession("islogin", 1)
-			this.ajaxMsg("登录成功", MSG_OK)
+			//返回jwt
+			jwt, i := this.Create_token(user.Name, "ximi")
+			fmt.Println("token&time", jwt, i)
+			list := make(map[string]interface{})
+			list["name"] = login_info.ReadName
+			list["token"] = jwt
+			this.ajaxList("登录成功", MSG_OK, 1, list)
 		} else {
 			this.ajaxMsg("你无权登录", MSG_ERR_Verified)
 		}

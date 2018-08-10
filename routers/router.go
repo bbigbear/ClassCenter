@@ -8,17 +8,13 @@ import (
 
 func init() {
 	beego.Router("/", &controllers.MainController{})
+
 	beego.Router("/v1/put_file", &controllers.BaseController{}, "*:PutFile")
 	//beego.Router("/v1/put_dbf_file", &controllers.BaseController{}, "*:PutDbf")
+	beego.Router("/v1/login", &controllers.LoginController{}, "post:LoginAction")
 	//jxkc
-	beego.Router("/v1/jxkc/apply", &controllers.JxkcController{}, "*:ApplyGet")
-	beego.Router("/v1/jxkc/check", &controllers.JxkcController{}, "*:CheckGet")
-	beego.Router("/v1/jxkc/maintain", &controllers.JxkcController{}, "*:MaintainGet")
-	beego.Router("/v1/jxkc/add", &controllers.JxkcController{}, "*:Add")
 	beego.Router("/v1/jxkc/add_action", &controllers.JxkcController{}, "post:AddAction")
 	beego.Router("/v1/jxkc/getdata", &controllers.JxkcController{}, "Get:GetData")
-	beego.Router("/v1/jxkc/look", &controllers.JxkcController{}, "*:Look")
-	beego.Router("/v1/jxkc/edit", &controllers.JxkcController{}, "*:Edit")
 	beego.Router("/v1/jxkc/del", &controllers.JxkcController{}, "post:Del")
 	beego.Router("/v1/jxkc/edit_action", &controllers.JxkcController{}, "post:EditAction")
 	beego.Router("/v1/jxkc/change", &controllers.JxkcController{}, "post:ChangeStatus")
@@ -53,10 +49,7 @@ func init() {
 	beego.Router("/v1/pkgl/eletive", &controllers.PkglController{}, "*:EletivePkGet")
 	beego.Router("/v1/pkgl/compulsory", &controllers.PkglController{}, "*:CompulsoryPkGet")
 	//sksj
-	beego.Router("/v1/sksj/eletive", &controllers.SksjController{}, "*:EletiveGet")
-	beego.Router("/v1/sksj/compulsory", &controllers.SksjController{}, "*:CompulsoryGet")
 	beego.Router("/v1/sksj/getdata", &controllers.SksjController{}, "*:GetData")
-	beego.Router("/v1/sksj/edit", &controllers.SksjController{}, "*:Edit")
 	beego.Router("/v1/sksj/edit_action", &controllers.SksjController{}, "post:EditAction")
 	beego.Router("/v1/sksj/save", &controllers.SksjController{}, "*:Save")
 	//xxkgl
@@ -115,5 +108,14 @@ func init() {
 	beego.Router("/v1/jbjc/plan/launch", &controllers.JbglController{}, "*:Check")
 	beego.Router("/v1/jbjc/plan/join", &controllers.JbglController{}, "*:CheckJoin")
 	beego.Router("/v1/jbjc/plan/view", &controllers.JbglController{}, "*:CheckView")
+	//xzz
+	beego.Router("/v1/xzz", &controllers.XzzglController{}, "*:Get")
+	beego.Router("/v1/xzz/add", &controllers.XzzglController{}, "*:Add")
+	beego.Router("/v1/xzz/add_action", &controllers.XzzglController{}, "post:AddAction")
+	beego.Router("/v1/xzz/getdata", &controllers.XzzglController{}, "*:GetData")
+	beego.Router("/v1/xzz/edit", &controllers.XzzglController{}, "*:Edit")
+	beego.Router("/v1/xzz/edit_action", &controllers.XzzglController{}, "post:EditAction")
+	beego.Router("/v1/xzz/del", &controllers.XzzglController{}, "post:Del")
+	beego.Router("/v1/xzz_discuss", &controllers.XzzglController{}, "*:GetDiscuss")
 
 }

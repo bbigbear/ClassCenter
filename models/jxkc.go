@@ -12,7 +12,7 @@ type Jxkc struct {
 	CourseName         string
 	CourseEnName       string
 	CourseAlias        string
-	CourseCost         string
+	CourseCost         float64
 	OpeningInstitution string
 	OpeningCoefficient string
 	ExaminationForm    string

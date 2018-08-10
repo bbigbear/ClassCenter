@@ -7,3 +7,12 @@ type Login struct {
 	UserId   string `json:"user_id"`
 	Username string `json:"tusername"`
 }
+
+type User struct {
+	Name string
+	Pwd  string
+}
+
+type Token struct {
+	Token string `json:"token"`
+}

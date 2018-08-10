@@ -4,6 +4,7 @@ import (
 	"ClassCenter/models"
 	"encoding/json"
 	"fmt"
+	"math"
 
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/astaxie/beego/orm"
@@ -31,6 +32,22 @@ func (this *JxjhController) Add() {
 
 func (this *JxjhController) AddAction() {
 	fmt.Println("add plan")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	list := make(map[string]interface{})
 	var jh models.Jxjh
@@ -52,12 +69,28 @@ func (this *JxjhController) AddAction() {
 		this.ajaxMsg("insert err", MSG_ERR_Resources)
 	}
 	list["planId"] = jh.PlanId
+	list["id"] = jh.Id
 	this.ajaxList("add success", MSG_OK, 1, list)
 	return
 }
 
 func (this *JxjhController) GetData() {
 	fmt.Println("get jxjh data")
+	//token
+	token := this.Input().Get("token")
+
+	if token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err.Error())
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	var maps []orm.Params
 	jh := new(models.Jxjh)
@@ -73,7 +106,7 @@ func (this *JxjhController) GetData() {
 	if grade != "" {
 		filters = append(filters, "PlanGrade", grade)
 	}
-	//name
+	//class
 	class := this.Input().Get("class")
 	if class != "" {
 		filters = append(filters, "PlanClass", class)
@@ -92,14 +125,45 @@ func (this *JxjhController) GetData() {
 			query = query.Filter(filters[k].(string), filters[k+1])
 		}
 	}
+
+	//index
+	index, err := this.GetInt("index")
+	if err != nil {
+		fmt.Println("获取index下标错误")
+	}
+
+	//pagemax  一页多少
+	pagemax, err := this.GetInt("pagemax")
+	if err != nil {
+		fmt.Println("获取每页数量为空")
+	}
+
+	//count
+	count, err := query.Count()
+	if err != nil {
+		fmt.Println("获取数据总数为空")
+		this.ajaxMsg("服务未知错误", MSG_ERR)
+	}
+
+	if pagemax != 0 {
+		pagenum := int(math.Ceil(float64(count) / float64(pagemax)))
+
+		if index > pagenum {
+			//index = pagenum
+			this.ajaxMsg("无法翻页了", MSG_ERR_Param)
+		}
+		fmt.Println("index&pagemax&pagenum", index, pagemax, pagenum)
+	}
+	query = query.Limit(pagemax, (index-1)*pagemax)
+
 	//get data dB
-	num, err := query.Values(&maps)
+	num, err := query.OrderBy("-CreatTime").Values(&maps)
 	if err != nil {
 		fmt.Println("get jxjh err", err.Error())
 		this.ajaxMsg("get jxjh err", MSG_ERR_Resources)
 	}
 	fmt.Println("get jxjh reslut num:", num)
-	this.ajaxList("get jxjh data success", 0, num, maps)
+	this.ajaxList("get jxjh data success", 0, count, maps)
 	return
 }
 

@@ -68,7 +68,7 @@
 	"排课参数设置":"/v1/pkgl/setting","教室不排课时间设置":"/v1/pkgl/classroom","教师不排课时间设置":"/v1/pkgl/teacher","选修课排课":"/v1/pkgl/eletive","必修课排课":"/v1/pkgl/compulsory","选修课课表设置":"/v1/sksj/eletive","必修课课表设置":"/v1/sksj/compulsory","选课设置":"/v1/xxkgl/setting",
 	"选课任务管理":"/v1/xxkgl/task","开课申请":"/v1/xxkgl/apply","开课审核":"/v1/xxkgl/approve","教师课表":"/v1/kbgl/teacher","教室课表":"/v1/kbgl/classroom","教学班课表":"/v1/kbgl/teachingclass","课时管理":"/v1/jsbk/time_manage","我的教案":"/v1/jsbk/case","教研组维护":"/v1/jsbk/group",
 	"执行教案审核":"/v1/jsbk/case/approve","入档案查询统计":"/v1/jsbk/case/query","教学进度统计报表":"/v1/jsbk/schedule","集备计划维护":"/v1/jbgl/plan","待发起的集备":"/v1/jbgl/plan/wait","我发起的集备":"/v1/jbgl/plan/launch","我参加的集备":"/v1/jbgl/plan/join","集备成功查看":"/v1/jbgl/plan/view",
-	"集备检查计划":"/v1/jbjc/plan/launch","我参加的检查":"/v1/jbjc/plan/join","集备检查查看":"/v1/jbjc/plan/view"};
+	"集备检查计划":"/v1/jbjc/plan/launch","我参加的检查":"/v1/jbjc/plan/join","集备检查查看":"/v1/jbjc/plan/view","协作组维护":"/v1/xzz","协作组讨论":"/v1/xzz_discuss"};
 	var noclickList=["教学课程管理","排课管理","上课时间设置","教学计划管理","选修课管理","查询统计报表","课表管理","协作组管理","集备管理","集备检查","教师备课"]
 	var newarray=new Array()
 	var list =[]

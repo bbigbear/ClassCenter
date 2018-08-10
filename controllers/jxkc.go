@@ -4,6 +4,7 @@ import (
 	"ClassCenter/models"
 	"encoding/json"
 	"fmt"
+	"math"
 	"time"
 
 	_ "github.com/Go-SQL-Driver/MySQL"
@@ -14,29 +15,28 @@ type JxkcController struct {
 	BaseController
 }
 
-func (this *JxkcController) ApplyGet() {
-	this.TplName = "jxkc_apply.tpl"
-}
-
-func (this *JxkcController) CheckGet() {
-	this.TplName = "jxkc_check.tpl"
-}
-
-func (this *JxkcController) MaintainGet() {
-	this.TplName = "jxkc_maintain.tpl"
-}
-
-func (this *JxkcController) Add() {
-	this.TplName = "jxkc_addclass.tpl"
-}
-
 func (this *JxkcController) AddAction() {
 	fmt.Println("add course")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	list := make(map[string]interface{})
 	var kc models.Jxkc
 	json.Unmarshal(this.Ctx.Input.RequestBody, &kc)
-
 	fmt.Println("xjkc_info:", &kc)
 
 	//time
@@ -60,17 +60,32 @@ func (this *JxkcController) AddAction() {
 
 func (this *JxkcController) GetData() {
 	fmt.Println("get jxkc data")
+	//token
+	token := this.Input().Get("token")
+
+	if token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err.Error())
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	var maps []orm.Params
 	kc := new(models.Jxkc)
 	query := o.QueryTable(kc)
 	filters := make([]interface{}, 0)
 	//name
-	name := this.Input().Get("name")
-	if name != "" {
-		filters = append(filters, "CourseName", name)
+	courseName := this.Input().Get("name")
+	if courseName != "" {
+		filters = append(filters, "CourseName", courseName)
 	}
-	fmt.Println("get name:", name)
+	fmt.Println("get name:", courseName)
 	//category
 	category := this.Input().Get("category")
 	if category != "" {
@@ -84,57 +99,65 @@ func (this *JxkcController) GetData() {
 			query = query.Filter(filters[k].(string), filters[k+1])
 		}
 	}
-	//get data dB
-	num, err := query.Values(&maps)
+
+	//index
+	index, err := this.GetInt("index")
 	if err != nil {
+		fmt.Println("获取index下标错误")
+	}
+
+	//pagemax  一页多少
+	pagemax, err := this.GetInt("pagemax")
+	if err != nil {
+		fmt.Println("获取每页数量为空")
+	}
+
+	//count
+	count, err := query.Count()
+	if err != nil {
+		fmt.Println("获取数据总数为空")
+		this.ajaxMsg("服务未知错误", MSG_ERR)
+	}
+
+	if pagemax != 0 {
+		pagenum := int(math.Ceil(float64(count) / float64(pagemax)))
+
+		if index > pagenum {
+			//index = pagenum
+			this.ajaxMsg("无法翻页了", MSG_ERR_Param)
+		}
+		fmt.Println("index&pagemax&pagenum", index, pagemax, pagenum)
+	}
+	query = query.Limit(pagemax, (index-1)*pagemax)
+
+	//get data dB
+	_, err1 := query.OrderBy("-CreatTime").Values(&maps)
+	if err1 != nil {
 		fmt.Println("get jxkc err", err.Error())
 		this.ajaxMsg("get jxkc err", MSG_ERR_Resources)
 	}
-	fmt.Println("get jxkc reslut num:", num)
-	this.ajaxList("get jxkc data success", 0, num, maps)
+	this.ajaxList("get jxkc data success", MSG_OK, count, maps)
 	return
-}
-
-func (this *JxkcController) Edit() {
-	o := orm.NewOrm()
-	var maps []orm.Params
-	kc := new(models.Jxkc)
-
-	id := this.Input().Get("id")
-	fmt.Println("id:", id)
-
-	num, err := o.QueryTable(kc).Filter("Id", id).Values(&maps)
-	if err != nil {
-		fmt.Println("edit jxkc err", err.Error())
-		this.ajaxMsg("edit jxkc err", MSG_ERR_Resources)
-	}
-	fmt.Println("edit rq reslut num:", num)
-	this.Data["m"] = maps
-	fmt.Println("maps", maps)
-	this.TplName = "jxkc_edit.tpl"
-}
-
-func (this *JxkcController) Look() {
-	o := orm.NewOrm()
-	var maps []orm.Params
-	kc := new(models.Jxkc)
-
-	id := this.Input().Get("id")
-	fmt.Println("id:", id)
-
-	num, err := o.QueryTable(kc).Filter("Id", id).Values(&maps)
-	if err != nil {
-		fmt.Println("edit jxkc err", err.Error())
-		this.ajaxMsg("edit jxkc err", MSG_ERR_Resources)
-	}
-	fmt.Println("edit rq reslut num:", num)
-	this.Data["m"] = maps
-	fmt.Println("maps", maps)
-	this.TplName = "jxkc_look.tpl"
 }
 
 func (this *JxkcController) EditAction() {
 	fmt.Println("edit action")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "gree")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	var kc models.Jxkc
 	json.Unmarshal(this.Ctx.Input.RequestBody, &kc)
@@ -158,16 +181,23 @@ func (this *JxkcController) EditAction() {
 func (this *JxkcController) ChangeStatus() {
 	fmt.Println("change status")
 	//id
-	id, err := this.GetInt("id")
-	if err != nil {
-		fmt.Println("get id err", err.Error())
-		this.ajaxMsg("get id err", MSG_ERR_Param)
-	}
-	fmt.Println("id:", id)
+	//	id, err := this.GetInt("id")
+	//	if err != nil {
+	//		fmt.Println("get id err", err.Error())
+	//		this.ajaxMsg("get id err", MSG_ERR_Param)
+	//	}
+	//	fmt.Println("id:", id)
 	//status
-	status := this.GetString("status")
-	fmt.Println("status is", status)
-
+	//	status := this.GetString("status")
+	//	fmt.Println("status is", status)
+	var kc_info models.Jxkc
+	json.Unmarshal(this.Ctx.Input.RequestBody, &kc_info)
+	fmt.Println("kc_info:", &kc_info)
+	id := kc_info.Id
+	status := kc_info.Status
+	if id == 0 || status == "" {
+		this.ajaxMsg("更新失败,id或者status不能为空", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	kc := new(models.Jxkc)
 	//updata status db
@@ -185,11 +215,18 @@ func (this *JxkcController) ChangeStatus() {
 
 func (this *JxkcController) Del() {
 	fmt.Println("del jxkc")
-	//id
-	id, err := this.GetInt("id")
-	if err != nil {
-		fmt.Println("del jxkc err", err.Error())
-		this.ajaxMsg("del jxkc err", MSG_ERR_Param)
+	//	//id
+	//	id, err := this.GetInt("id")
+	//	if err != nil {
+	//		fmt.Println("del jxkc err", err.Error())
+	//		this.ajaxMsg("del jxkc err", MSG_ERR_Param)
+	//	}
+	var kc_info models.Jxkc
+	json.Unmarshal(this.Ctx.Input.RequestBody, &kc_info)
+	fmt.Println("kc_info:", &kc_info)
+	id := kc_info.Id
+	if id == 0 {
+		this.ajaxMsg("删除失败", MSG_ERR_Param)
 	}
 	fmt.Println("id:", id)
 	o := orm.NewOrm()

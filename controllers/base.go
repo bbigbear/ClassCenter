@@ -17,6 +17,7 @@ import (
 	"github.com/LindsayBradford/go-dbf/godbf"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"
+	"github.com/dgrijalva/jwt-go"
 )
 
 const (
@@ -178,6 +179,45 @@ func (this *BaseController) GetRandomString(l int) string {
 		result = append(result, bytes[r.Intn(len(bytes))])
 	}
 	return string(result)
+}
+
+type Claims struct {
+	Appid string `json:"appid"`
+	// recommended having
+	jwt.StandardClaims
+}
+
+//jwt
+func (this *BaseController) Create_token(appid string, secret string) (string, int64) {
+	expireToken := time.Now().Add(time.Hour * 1).Unix()
+	claims := Claims{
+		appid,
+		jwt.StandardClaims{
+			ExpiresAt: expireToken,
+			Issuer:    appid,
+		},
+	}
+
+	// Create the token using your claims
+	c_token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// Signs the token with a secret.
+	signedToken, _ := c_token.SignedString([]byte(secret))
+
+	return signedToken, expireToken
+}
+
+func (this *BaseController) Token_auth(signedToken, secret string) (string, error) {
+	token, err := jwt.ParseWithClaims(signedToken, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
+	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
+		//fmt.Printf("%v %v", claims.Username, claims.StandardClaims.ExpiresAt)
+		//fmt.Println(reflect.TypeOf(claims.StandardClaims.ExpiresAt))
+		//return claims.Appid, err
+		return claims.Appid, err
+	}
+	return "", err
 }
 
 //单点登录
