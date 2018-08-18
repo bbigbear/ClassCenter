@@ -14,22 +14,6 @@ type JxjhController struct {
 	BaseController
 }
 
-func (this *JxjhController) ApplyGet() {
-	this.TplName = "jxjh_apply.tpl"
-}
-
-func (this *JxjhController) CheckGet() {
-	this.TplName = "jxjh_check.tpl"
-}
-
-func (this *JxjhController) MaintainGet() {
-	this.TplName = "jxjh_maintain.tpl"
-}
-
-func (this *JxjhController) Add() {
-	this.TplName = "jxjh_addclass.tpl"
-}
-
 func (this *JxjhController) AddAction() {
 	fmt.Println("add plan")
 	//获取token
@@ -157,56 +141,34 @@ func (this *JxjhController) GetData() {
 	query = query.Limit(pagemax, (index-1)*pagemax)
 
 	//get data dB
-	num, err := query.OrderBy("-CreatTime").Values(&maps)
+	num, err := query.OrderBy("-Id").Values(&maps)
 	if err != nil {
 		fmt.Println("get jxjh err", err.Error())
 		this.ajaxMsg("get jxjh err", MSG_ERR_Resources)
 	}
 	fmt.Println("get jxjh reslut num:", num)
-	this.ajaxList("get jxjh data success", 0, count, maps)
+	this.ajaxList("get jxjh data success", MSG_OK, count, maps)
 	return
-}
-
-func (this *JxjhController) Edit() {
-	o := orm.NewOrm()
-	var maps []orm.Params
-	jh := new(models.Jxjh)
-
-	id := this.Input().Get("id")
-	fmt.Println("id:", id)
-
-	num, err := o.QueryTable(jh).Filter("Id", id).Values(&maps)
-	if err != nil {
-		fmt.Println("edit jxjh err", err.Error())
-		this.ajaxMsg("edit jxjh err", MSG_ERR_Resources)
-	}
-	fmt.Println("edit rq reslut num:", num)
-	this.Data["m"] = maps
-	fmt.Println("maps", maps)
-	this.TplName = "jxjh_edit.tpl"
-}
-
-func (this *JxjhController) Look() {
-	o := orm.NewOrm()
-	var maps []orm.Params
-	jh := new(models.Jxjh)
-
-	id := this.Input().Get("id")
-	fmt.Println("id:", id)
-
-	num, err := o.QueryTable(jh).Filter("Id", id).Values(&maps)
-	if err != nil {
-		fmt.Println("edit jxjh err", err.Error())
-		this.ajaxMsg("edit jxjh err", MSG_ERR_Resources)
-	}
-	fmt.Println("edit rq reslut num:", num)
-	this.Data["m"] = maps
-	fmt.Println("maps", maps)
-	this.TplName = "jxjh_look.tpl"
 }
 
 func (this *JxjhController) EditAction() {
 	fmt.Println("edit action")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	var jh models.Jxjh
 	json.Unmarshal(this.Ctx.Input.RequestBody, &jh)
@@ -223,17 +185,30 @@ func (this *JxjhController) EditAction() {
 
 func (this *JxjhController) ChangeStatus() {
 	fmt.Println("change status")
-	//id
-	id, err := this.GetInt("id")
-	if err != nil {
-		fmt.Println("get id err", err.Error())
-		this.ajaxMsg("get id err", MSG_ERR_Param)
-	}
-	fmt.Println("id:", id)
-	//status
-	status := this.GetString("status")
-	fmt.Println("status is", status)
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
 
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
+	var jxjh_info models.Jxjh
+	json.Unmarshal(this.Ctx.Input.RequestBody, &jxjh_info)
+	fmt.Println("jxjh_info:", &jxjh_info)
+	id := jxjh_info.Id
+	status := jxjh_info.Status
+	if id == 0 || status == "" {
+		this.ajaxMsg("更新失败,id或者status不能为空", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	jh := new(models.Jxjh)
 	//updata status db
@@ -251,13 +226,29 @@ func (this *JxjhController) ChangeStatus() {
 
 func (this *JxjhController) Del() {
 	fmt.Println("del jxjh")
-	//id
-	id, err := this.GetInt("id")
-	if err != nil {
-		fmt.Println("del jxjh err", err.Error())
-		this.ajaxMsg("del jxjh err", MSG_ERR_Param)
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
 	}
-	fmt.Println("id:", id)
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
+	var jxjh_info models.Jxjh
+	json.Unmarshal(this.Ctx.Input.RequestBody, &jxjh_info)
+	fmt.Println("jxjh_info:", &jxjh_info)
+	id := jxjh_info.Id
+	if id == 0 {
+		this.ajaxMsg("删除失败", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	jh := new(models.Jxjh)
 	num, err := o.QueryTable(jh).Filter("Id", id).Delete()
@@ -271,33 +262,25 @@ func (this *JxjhController) Del() {
 	return
 }
 
-func (this *JxjhController) JxrwAllotGet() {
-	this.TplName = "jxrw_allot.tpl"
-}
-
-func (this *JxjhController) JxrwGenerateGet() {
-	this.TplName = "jxrw_generate.tpl"
-}
-
-func (this *JxjhController) JxrwCheckGet() {
-	this.TplName = "jxrw_check.tpl"
-}
-
-func (this *JxjhController) JhkcAllotGet() {
-	planId := this.GetString("planId")
-	if planId == "" {
-		fmt.Println("get jxjh id null")
-	}
-	this.Data["planId"] = planId
-	this.TplName = "jxjh_jhkc_allot.tpl"
-}
-
-func (this *JxjhController) JhkcAdd() {
-	this.TplName = "jxjh_jhkc_add.tpl"
-}
-
-func (this *JxjhController) JhkcAllotSave() {
+//分配
+func (this *JxjhController) JhkcAddAction() {
 	fmt.Println("add course")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	var jxrw models.Jxrw
 	json.Unmarshal(this.Ctx.Input.RequestBody, &jxrw)
@@ -313,45 +296,188 @@ func (this *JxjhController) JhkcAllotSave() {
 	}
 	list := make(map[string]interface{})
 	jxrw.Status = "生成成功"
-	_, err := o.Insert(&jxrw)
-	if err != nil {
-		fmt.Printf("insert err", err.Error())
+	_, err1 := o.Insert(&jxrw)
+	if err1 != nil {
+		fmt.Printf("insert err", err1.Error())
 		this.ajaxMsg("insert err", MSG_ERR_Resources)
 	}
 	list["id"] = jxrw.Id
 	this.ajaxList("add success", MSG_OK, 1, list)
 	return
 }
-func (this *JxjhController) Jhkclook() {
-	planId := this.GetString("planId")
-	if planId == "" {
-		fmt.Println("get jxjh id null")
+
+//编辑
+func (this *JxjhController) JhkcEditAction() {
+	fmt.Println("edit course")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
 	}
-	var maps []orm.Params
-	rw := new(models.Jxrw)
-	o := orm.NewOrm()
-	_, err := o.QueryTable(rw).Filter("PlanId", planId).Values(&maps)
+
+	name, err := this.Token_auth(token.Token, "ximi")
 	if err != nil {
-		fmt.Println("get rw err", err.Error())
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
 	}
-	this.Data["m"] = maps
-	this.TplName = "jxrw_kc_look.tpl"
-}
-func (this *JxjhController) JxrwTeacherAllotGet() {
-	planId := this.GetString("planId")
-	if planId == "" {
-		fmt.Println("get jxjh id null")
+	fmt.Println("当前访问用户为:", name)
+
+	o := orm.NewOrm()
+	var jxrw models.Jxrw
+	json.Unmarshal(this.Ctx.Input.RequestBody, &jxrw)
+	//courseid
+	if jxrw.CourseId == "" {
+		fmt.Println("courseId is null")
+		this.ajaxMsg("courseId is null", MSG_ERR_Param)
 	}
-	this.Data["planId"] = planId
-	this.TplName = "jxrw_teacher_allot.tpl"
+	//planid
+	if jxrw.PlanId == "" {
+		fmt.Println("planId is null")
+		this.ajaxMsg("planId is null", MSG_ERR_Param)
+	}
+	_, err1 := o.Update(&jxrw)
+	if err1 != nil {
+		fmt.Printf("update err", err1.Error())
+		this.ajaxMsg("update err", MSG_ERR_Resources)
+	}
+	this.ajaxMsg("update success", MSG_OK)
 }
 
-func (this *JxjhController) JxrwTeacherAdd() {
-	this.TplName = "jxrw_teacher_add.tpl"
-}
-
-func (this *JxjhController) JxrwTeacherAllotSave() {
+//查看
+func (this *JxjhController) JhkcLook() {
 	fmt.Println("add course")
+	//token
+	token := this.Input().Get("token")
+
+	if token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err.Error())
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
+	//planId为空
+	planId := this.Input().Get("planId")
+	if planId == "" {
+		fmt.Println("planId 为空")
+		this.ajaxMsg("planId 不能为空", MSG_ERR_Param)
+	}
+	o := orm.NewOrm()
+	jxrw := new(models.Jxrw)
+	var maps []orm.Params
+	num, err := o.QueryTable(jxrw).Filter("PlanId", planId).Values(&maps)
+	if err != nil {
+		fmt.Println("get jhkc data err", err.Error())
+	}
+	this.ajaxList("get data success", MSG_OK, num, maps)
+}
+
+//获取
+func (this *JxjhController) JhkcGetData() {
+	fmt.Println("get jhkc data")
+	//token
+	token := this.Input().Get("token")
+
+	if token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err.Error())
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
+	o := orm.NewOrm()
+	var maps []orm.Params
+	kc := new(models.Jxkc)
+	query := o.QueryTable(kc)
+	filters := make([]interface{}, 0)
+	//name
+	courseName := this.Input().Get("courseName")
+	if courseName != "" {
+		filters = append(filters, "CourseName", courseName)
+	}
+	//term
+	term := this.Input().Get("term")
+	if term != "" {
+		filters = append(filters, "Term", term)
+	}
+	if len(filters) > 0 {
+		l := len(filters)
+		for k := 0; k < l; k += 2 {
+			query = query.Filter(filters[k].(string), filters[k+1])
+		}
+	}
+	//index
+	index, err := this.GetInt("index")
+	if err != nil {
+		fmt.Println("获取index下标错误")
+	}
+	//pagemax  一页多少
+	pagemax, err := this.GetInt("pagemax")
+	if err != nil {
+		fmt.Println("获取每页数量为空")
+	}
+
+	//count
+	count, err := query.Count()
+	if err != nil {
+		fmt.Println("获取数据总数为空")
+		this.ajaxMsg("服务未知错误", MSG_ERR)
+	}
+
+	if pagemax != 0 {
+		pagenum := int(math.Ceil(float64(count) / float64(pagemax)))
+
+		if index > pagenum {
+			//index = pagenum
+			this.ajaxMsg("无法翻页了", MSG_ERR_Param)
+		}
+		fmt.Println("index&pagemax&pagenum", index, pagemax, pagenum)
+	}
+	query = query.Limit(pagemax, (index-1)*pagemax)
+
+	//get data dB
+	num, err := query.OrderBy("-Id").Values(&maps)
+	if err != nil {
+		fmt.Println("get jhkc err", err.Error())
+		this.ajaxMsg("get jhkc err", MSG_ERR_Resources)
+	}
+	fmt.Println("get jhkc reslut num:", num)
+	this.ajaxList("get jhkc data success", MSG_OK, count, maps)
+	return
+}
+
+//分配任务
+func (this *JxjhController) JxrwTeacherAllotSave() {
+	fmt.Println("add teacher")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	var jxrw models.Jxrw_teacher_allot
 	json.Unmarshal(this.Ctx.Input.RequestBody, &jxrw)
@@ -367,9 +493,9 @@ func (this *JxjhController) JxrwTeacherAllotSave() {
 	}
 	list := make(map[string]interface{})
 	jxrw.Status = "已分配"
-	_, err := o.Insert(&jxrw)
-	if err != nil {
-		fmt.Printf("insert err", err.Error())
+	_, err1 := o.Insert(&jxrw)
+	if err1 != nil {
+		fmt.Printf("insert err", err1.Error())
 		this.ajaxMsg("insert err", MSG_ERR_Resources)
 	}
 	list["id"] = jxrw.Id

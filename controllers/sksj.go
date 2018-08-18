@@ -102,11 +102,40 @@ func (this *SksjController) Save() {
 	json.Unmarshal(this.Ctx.Input.RequestBody, &kbsz)
 	fmt.Println("kbsz_info:", &kbsz)
 	//updata kbsz db
+	kbsz.Id = 1
 	_, err1 := o.Update(&kbsz)
 	if err1 != nil {
 		fmt.Println("updata kbsz err", err1.Error())
 		this.ajaxMsg("updata kbsz err", MSG_ERR_Resources)
 	}
 	this.ajaxMsg("update kbsz success", MSG_OK)
+	return
+}
+
+func (this *SksjController) GetSetting() {
+	//获取token
+	token := this.Input().Get("token")
+
+	if token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err.Error())
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
+	o := orm.NewOrm()
+	kbsz := new(models.KbszSetting)
+	var maps []orm.Params
+	num, err := o.QueryTable(kbsz).Filter("Id", 1).Values(&maps)
+	if err != nil {
+		fmt.Println("get kbsz err", err.Error())
+		this.ajaxMsg("get kbsz err", MSG_ERR_Resources)
+	}
+	this.ajaxList("get data success", MSG_OK, num, maps)
 	return
 }

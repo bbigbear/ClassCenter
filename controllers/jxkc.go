@@ -25,7 +25,6 @@ func (this *JxkcController) AddAction() {
 		fmt.Println("token 为空")
 		this.ajaxMsg("token is not nil", MSG_ERR_Param)
 	}
-
 	name, err := this.Token_auth(token.Token, "ximi")
 	if err != nil {
 		fmt.Println("token err", err)
@@ -131,7 +130,7 @@ func (this *JxkcController) GetData() {
 	query = query.Limit(pagemax, (index-1)*pagemax)
 
 	//get data dB
-	_, err1 := query.OrderBy("-CreatTime").Values(&maps)
+	_, err1 := query.OrderBy("-Id").Values(&maps)
 	if err1 != nil {
 		fmt.Println("get jxkc err", err.Error())
 		this.ajaxMsg("get jxkc err", MSG_ERR_Resources)
@@ -142,6 +141,7 @@ func (this *JxkcController) GetData() {
 
 func (this *JxkcController) EditAction() {
 	fmt.Println("edit action")
+
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -151,7 +151,7 @@ func (this *JxkcController) EditAction() {
 		this.ajaxMsg("token is not nil", MSG_ERR_Param)
 	}
 
-	name, err := this.Token_auth(token.Token, "gree")
+	name, err := this.Token_auth(token.Token, "ximi")
 	if err != nil {
 		fmt.Println("token err", err)
 		this.ajaxMsg("token err!", MSG_ERR_Verified)
@@ -180,16 +180,22 @@ func (this *JxkcController) EditAction() {
 
 func (this *JxkcController) ChangeStatus() {
 	fmt.Println("change status")
-	//id
-	//	id, err := this.GetInt("id")
-	//	if err != nil {
-	//		fmt.Println("get id err", err.Error())
-	//		this.ajaxMsg("get id err", MSG_ERR_Param)
-	//	}
-	//	fmt.Println("id:", id)
-	//status
-	//	status := this.GetString("status")
-	//	fmt.Println("status is", status)
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	var kc_info models.Jxkc
 	json.Unmarshal(this.Ctx.Input.RequestBody, &kc_info)
 	fmt.Println("kc_info:", &kc_info)
@@ -215,12 +221,22 @@ func (this *JxkcController) ChangeStatus() {
 
 func (this *JxkcController) Del() {
 	fmt.Println("del jxkc")
-	//	//id
-	//	id, err := this.GetInt("id")
-	//	if err != nil {
-	//		fmt.Println("del jxkc err", err.Error())
-	//		this.ajaxMsg("del jxkc err", MSG_ERR_Param)
-	//	}
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
 	var kc_info models.Jxkc
 	json.Unmarshal(this.Ctx.Input.RequestBody, &kc_info)
 	fmt.Println("kc_info:", &kc_info)

@@ -189,7 +189,7 @@ type Claims struct {
 
 //jwt
 func (this *BaseController) Create_token(appid string, secret string) (string, int64) {
-	expireToken := time.Now().Add(time.Hour * 1).Unix()
+	expireToken := time.Now().Add(time.Hour * 24).Unix()
 	claims := Claims{
 		appid,
 		jwt.StandardClaims{
