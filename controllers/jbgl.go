@@ -14,14 +14,6 @@ type JbglController struct {
 	BaseController
 }
 
-func (this *JbglController) Get() {
-	this.TplName = "jbgl_plan_maintain.tpl"
-}
-
-func (this *JbglController) Add() {
-	this.TplName = "jbgl_plan_add.tpl"
-}
-
 func (this *JbglController) AddAction() {
 	fmt.Println("add case")
 	o := orm.NewOrm()
@@ -60,25 +52,6 @@ func (this *JbglController) GetData() {
 	fmt.Println("get jbjh reslut num:", num)
 	this.ajaxList("get jbjh data success", 0, num, maps)
 	return
-}
-
-func (this *JbglController) Edit() {
-	o := orm.NewOrm()
-	var maps []orm.Params
-	jbjh := new(models.Jbjh)
-
-	id := this.Input().Get("id")
-	fmt.Println("id:", id)
-
-	num, err := o.QueryTable(jbjh).Filter("Id", id).Values(&maps)
-	if err != nil {
-		fmt.Println("edit jbjh err", err.Error())
-		this.ajaxMsg("edit jbjh err", MSG_ERR_Resources)
-	}
-	fmt.Println("edit jbjh reslut num:", num)
-	this.Data["m"] = maps
-	fmt.Println("maps", maps)
-	this.TplName = "jbgl_plan_edit.tpl"
 }
 
 func (this *JbglController) EditAction() {
@@ -144,32 +117,4 @@ func (this *JbglController) Del() {
 	//list["data"] = maps
 	this.ajaxMsg("del jbjh success", MSG_OK)
 	return
-}
-
-func (this *JbglController) WaitLaunch() {
-	this.TplName = "jbgl_plan_waitlaunch.tpl"
-}
-
-func (this *JbglController) Launch() {
-	this.TplName = "jbgl_plan_launch.tpl"
-}
-
-func (this *JbglController) Join() {
-	this.TplName = "jbgl_plan_join.tpl"
-}
-
-func (this *JbglController) View() {
-	this.TplName = "jbgl_plan_view.tpl"
-}
-
-func (this *JbglController) Check() {
-	this.TplName = "jbjc_plan_check.tpl"
-}
-
-func (this *JbglController) CheckJoin() {
-	this.TplName = "jbjc_plan_join.tpl"
-}
-
-func (this *JbglController) CheckView() {
-	this.TplName = "jbjc_plan_view.tpl"
 }

@@ -14,14 +14,6 @@ type XzzglController struct {
 	BaseController
 }
 
-func (this *XzzglController) Get() {
-	this.TplName = "xzzgl_maintain.tpl"
-}
-
-func (this *XzzglController) Add() {
-	this.TplName = "xzzgl_add.tpl"
-}
-
 func (this *XzzglController) AddAction() {
 	fmt.Println("add case")
 	o := orm.NewOrm()
@@ -116,8 +108,4 @@ func (this *XzzglController) Del() {
 	//list["data"] = maps
 	this.ajaxMsg("del xzz success", MSG_OK)
 	return
-}
-
-func (this *XzzglController) GetDiscuss() {
-	this.TplName = "xzzgl_discuss.tpl"
 }
