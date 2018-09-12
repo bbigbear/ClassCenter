@@ -4,6 +4,7 @@ import (
 	"ClassCenter/models"
 	"encoding/json"
 	"fmt"
+	"math"
 	"time"
 
 	_ "github.com/Go-SQL-Driver/MySQL"
@@ -16,6 +17,14 @@ type JbglController struct {
 
 func (this *JbglController) AddAction() {
 	fmt.Println("add case")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	list := make(map[string]interface{})
 	var jbjh models.Jbjh
@@ -28,7 +37,7 @@ func (this *JbglController) AddAction() {
 		fmt.Println("新建失败")
 	}
 	jbjh.CreateTime = nowtime
-	jbjh.Status = "已创建"
+	jbjh.Status = "已创建 待发起"
 	//insert
 	_, err1 := o.Insert(&jbjh)
 	if err1 != nil {
@@ -41,21 +50,92 @@ func (this *JbglController) AddAction() {
 }
 
 func (this *JbglController) GetData() {
+	//token
+	token := this.Input().Get("token")
+
+	if token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	var maps []orm.Params
 	jbjh := new(models.Jbjh)
-	num, err := o.QueryTable(jbjh).Values(&maps)
-	if err != nil {
-		fmt.Println("get jbjh err", err.Error())
-		this.ajaxMsg("get jbjh err", MSG_ERR_Resources)
+	query := o.QueryTable(jbjh)
+
+	//标题
+	title := this.Input().Get("Title")
+	if title != "" {
+		query = query.Filter("Title", title)
 	}
-	fmt.Println("get jbjh reslut num:", num)
-	this.ajaxList("get jbjh data success", 0, num, maps)
-	return
+	//状态
+	status := this.Input().Get("status")
+	if status != "" {
+		query = query.Filter("Status", status)
+	}
+
+	//我创建的
+	founder := this.Input().Get("founder")
+	if founder != "" {
+		query = query.Filter("Founter", founder)
+	}
+
+	//我参加的
+	part := this.Input().Get("part")
+	if part != "" {
+		query = query.Filter("Participant", part)
+	}
+
+	//index
+	index, err := this.GetInt("index")
+	if err != nil {
+		fmt.Println("获取index下标错误")
+	}
+
+	//pagemax  一页多少
+	pagemax, err := this.GetInt("pagemax")
+	if err != nil {
+		fmt.Println("获取每页数量为空")
+	}
+
+	//count
+	count, err := query.Count()
+	if err != nil {
+		fmt.Println("获取数据总数为空")
+		this.ajaxMsg("服务未知错误", MSG_ERR)
+	}
+
+	if pagemax != 0 {
+		pagenum := int(math.Ceil(float64(count) / float64(pagemax)))
+
+		if index > pagenum {
+			//index = pagenum
+			this.ajaxMsg("无法翻页了", MSG_ERR_Param)
+		}
+		fmt.Println("index&pagemax&pagenum", index, pagemax, pagenum)
+	}
+	query = query.Limit(pagemax, (index-1)*pagemax)
+
+	num, err := query.OrderBy("-Id").Values(&maps)
+	if err != nil {
+		fmt.Println("get jbgl err", err.Error())
+		this.ajaxMsg("get jbgl err", MSG_ERR_Resources)
+	}
+	fmt.Println("get jbgl reslut num:", num)
+	this.ajaxList("get jbgl data success", MSG_OK, num, maps)
+
 }
 
 func (this *JbglController) EditAction() {
 	fmt.Println("edit action")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+
 	o := orm.NewOrm()
 	var jbjh models.Jbjh
 	json.Unmarshal(this.Ctx.Input.RequestBody, &jbjh)
@@ -69,8 +149,17 @@ func (this *JbglController) EditAction() {
 	this.ajaxMsg("update jbjh success", MSG_OK)
 	return
 }
+
 func (this *JbglController) ChangeStatus() {
 	fmt.Println("change status")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
 	//id
 	id, err := this.GetInt("id")
 	if err != nil {
@@ -80,6 +169,9 @@ func (this *JbglController) ChangeStatus() {
 	fmt.Println("id:", id)
 	//status
 	status := this.GetString("status")
+	if status == "" {
+		fmt.Println("status 不能为空")
+	}
 	fmt.Println("status is", status)
 
 	o := orm.NewOrm()
@@ -99,6 +191,14 @@ func (this *JbglController) ChangeStatus() {
 
 func (this *JbglController) Del() {
 	fmt.Println("del jbjh")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
 	//id
 	id, err := this.GetInt("id")
 	if err != nil {

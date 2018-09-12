@@ -5,18 +5,51 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
-	"time"
 
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/astaxie/beego/orm"
 )
 
-type XzzglController struct {
+type JstkController struct {
 	BaseController
 }
 
-func (this *XzzglController) AddAction() {
-	fmt.Println("add case")
+func (this *JstkController) RyapAdd() {
+	fmt.Println("人员安排-添加记录")
+	//获取token
+	var token models.Token
+	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
+
+	if token.Token == "" {
+		fmt.Println("token 为空")
+		this.ajaxMsg("token is not nil", MSG_ERR_Param)
+	}
+	name, err := this.Token_auth(token.Token, "ximi")
+	if err != nil {
+		fmt.Println("token err", err)
+		this.ajaxMsg("token err!", MSG_ERR_Verified)
+	}
+	fmt.Println("当前访问用户为:", name)
+
+	o := orm.NewOrm()
+	list := make(map[string]interface{})
+	var jstk models.Jstk
+	json.Unmarshal(this.Ctx.Input.RequestBody, &jstk)
+
+	fmt.Println("jstk_info:", &jstk)
+	//insert
+	_, err1 := o.Insert(&jstk)
+	if err1 != nil {
+		fmt.Printf("insert err", err1.Error())
+		this.ajaxMsg("insert err", MSG_ERR_Resources)
+	}
+	list["id"] = jstk.Id
+	this.ajaxList("add success", MSG_OK, 1, list)
+	return
+}
+
+func (this *JsbkController) RyapAddPeople() {
+	fmt.Println("add staff")
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -32,30 +65,33 @@ func (this *XzzglController) AddAction() {
 		this.ajaxMsg("token err!", MSG_ERR_Verified)
 	}
 	fmt.Println("当前访问用户为:", name)
-	o := orm.NewOrm()
-	list := make(map[string]interface{})
-	var xzz models.Xzz
-	json.Unmarshal(this.Ctx.Input.RequestBody, &xzz)
 
-	fmt.Println("xzz_info:", &xzz)
-	//time
-	nowtime, err := time.Parse("2006-01-02 15:04:05", time.Now().Format("2006-01-02 15:04:05"))
+	var jstk_info models.Jstk
+	json.Unmarshal(this.Ctx.Input.RequestBody, &jstk_info)
+	fmt.Println("jstk_info:", &jstk_info)
+	id := jstk_info.Id
+	staff := jstk_info.Staffing
+	if id == 0 || staff == "" {
+		this.ajaxMsg("更新失败,id或者staff不能为空", MSG_ERR_Param)
+	}
+
+	o := orm.NewOrm()
+	jstk := new(models.Jstk)
+	//updata status db
+	num, err := o.QueryTable(jstk).Filter("Id", id).Update(orm.Params{
+		"Staffing": staff,
+	})
 	if err != nil {
-		fmt.Println("新建失败")
+		fmt.Println("add staff err", err.Error())
+		this.ajaxMsg("add staff err", MSG_ERR_Resources)
 	}
-	xzz.CreateTime = nowtime
-	//insert
-	_, err1 := o.Insert(&xzz)
-	if err1 != nil {
-		fmt.Printf("insert err", err1.Error())
-		this.ajaxMsg("insert err", MSG_ERR_Resources)
-	}
-	list["xzzId"] = xzz.Id
-	this.ajaxList("add success", MSG_OK, 1, list)
+	fmt.Println("num", num)
+	this.ajaxMsg("add staff success", MSG_OK)
 	return
 }
 
-func (this *XzzglController) GetData() {
+func (this *JstkController) RyapGetData() {
+	fmt.Println("get jstk data")
 	//token
 	token := this.Input().Get("token")
 
@@ -70,10 +106,25 @@ func (this *XzzglController) GetData() {
 		this.ajaxMsg("token err!", MSG_ERR_Verified)
 	}
 	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	var maps []orm.Params
-	xzz := new(models.Xzz)
-	query := o.QueryTable(xzz)
+	jstk := new(models.Jstk)
+	query := o.QueryTable(jstk)
+	filters := make([]interface{}, 0)
+	//OrderName
+	orderName := this.Input().Get("orderName")
+	if orderName != "" {
+		filters = append(filters, "OrderName", orderName)
+	}
+
+	if len(filters) > 0 {
+		l := len(filters)
+		for k := 0; k < l; k += 2 {
+			query = query.Filter(filters[k].(string), filters[k+1])
+		}
+	}
+
 	//index
 	index, err := this.GetInt("index")
 	if err != nil {
@@ -106,16 +157,15 @@ func (this *XzzglController) GetData() {
 
 	num, err := query.OrderBy("-Id").Values(&maps)
 	if err != nil {
-		fmt.Println("get xzz err", err.Error())
-		this.ajaxMsg("get xzz err", MSG_ERR_Resources)
+		fmt.Println("get jstk err", err.Error())
+		this.ajaxMsg("get jstk err", MSG_ERR_Resources)
 	}
-	fmt.Println("get xzz reslut num:", num)
-	this.ajaxList("get xzz data success", 0, num, maps)
-	return
+	fmt.Println("get jstk reslut num:", num)
+	this.ajaxList("get jstk data success", MSG_OK, num, maps)
 }
 
-func (this *XzzglController) EditAction() {
-	fmt.Println("edit action")
+func (this *JstkController) RyapDel() {
+	fmt.Println("del jstk")
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -132,59 +182,29 @@ func (this *XzzglController) EditAction() {
 	}
 	fmt.Println("当前访问用户为:", name)
 
-	o := orm.NewOrm()
-	var xzz models.Xzz
-	json.Unmarshal(this.Ctx.Input.RequestBody, &xzz)
-	fmt.Println("xzz_info:", &xzz)
-	//updata xzz db
-	_, err1 := o.Update(&xzz)
-	if err1 != nil {
-		fmt.Println("updata xzz err", err1.Error())
-		this.ajaxMsg("updata xzz err", MSG_ERR_Resources)
-	}
-	this.ajaxMsg("update xzz success", MSG_OK)
-	return
-}
-
-func (this *XzzglController) Del() {
-	fmt.Println("del xzz")
-	//获取token
-	var token models.Token
-	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
-
-	if token.Token == "" {
-		fmt.Println("token 为空")
-		this.ajaxMsg("token is not nil", MSG_ERR_Param)
-	}
-
-	name, err := this.Token_auth(token.Token, "ximi")
-	if err != nil {
-		fmt.Println("token err", err)
-		this.ajaxMsg("token err!", MSG_ERR_Verified)
-	}
-	fmt.Println("当前访问用户为:", name)
-	var xzz_info models.Xzz
-	json.Unmarshal(this.Ctx.Input.RequestBody, &xzz_info)
-	fmt.Println("xzz_info:", &xzz_info)
-	id := xzz_info.Id
+	var jstk_info models.Jstk
+	json.Unmarshal(this.Ctx.Input.RequestBody, &jstk_info)
+	fmt.Println("jstk_info:", &jstk_info)
+	id := jstk_info.Id
 	if id == 0 {
 		this.ajaxMsg("删除失败", MSG_ERR_Param)
 	}
 	o := orm.NewOrm()
-	xzz := new(models.Xzz)
-	num, err := o.QueryTable(xzz).Filter("Id", id).Delete()
+	jstk := new(models.Jstk)
+	num, err := o.QueryTable(jstk).Filter("Id", id).Delete()
 	if err != nil {
-		fmt.Println("del xzz err", err.Error())
-		this.ajaxMsg("del xzz err", MSG_ERR_Resources)
+		fmt.Println("del jstk err", err.Error())
+		this.ajaxMsg("del jstk err", MSG_ERR_Resources)
 	}
-	fmt.Println("del xzz reslut num:", num)
+	fmt.Println("del jstk reslut num:", num)
 	//list["data"] = maps
-	this.ajaxMsg("del xzz success", MSG_OK)
+	this.ajaxMsg("del jstk success", MSG_OK)
 	return
 }
 
-func (this *XzzglController) XzztlAdd() {
-	fmt.Println("add xzztl")
+//调课申请
+func (this *JstkController) TkAdd() {
+	fmt.Println("调课-添加记录")
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -193,32 +213,26 @@ func (this *XzzglController) XzztlAdd() {
 		fmt.Println("token 为空")
 		this.ajaxMsg("token is not nil", MSG_ERR_Param)
 	}
-
 	name, err := this.Token_auth(token.Token, "ximi")
 	if err != nil {
 		fmt.Println("token err", err)
 		this.ajaxMsg("token err!", MSG_ERR_Verified)
 	}
 	fmt.Println("当前访问用户为:", name)
+
 	o := orm.NewOrm()
 	list := make(map[string]interface{})
-	var xzztl models.Xzztl
-	json.Unmarshal(this.Ctx.Input.RequestBody, &xzztl)
-
-	fmt.Println("xzztl_info:", &xzztl)
-	//time
-	nowtime, err := time.Parse("2006-01-02 15:04:05", time.Now().Format("2006-01-02 15:04:05"))
-	if err != nil {
-		fmt.Println("新建失败")
-	}
-	xzztl.CreateTime = nowtime
+	var tksq models.Tksq
+	json.Unmarshal(this.Ctx.Input.RequestBody, &tksq)
+	fmt.Println("tksq_info:", &tksq)
+	tksq.Status = "已提交 未审核"
 	//insert
-	_, err1 := o.Insert(&xzztl)
+	_, err1 := o.Insert(&tksq)
 	if err1 != nil {
 		fmt.Printf("insert err", err1.Error())
 		this.ajaxMsg("insert err", MSG_ERR_Resources)
 	}
-	list["id"] = xzztl.Id
+	list["id"] = tksq.Id
 	this.ajaxList("add success", MSG_OK, 1, list)
 	return
 }

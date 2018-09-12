@@ -25,6 +25,7 @@ type Xkrw struct {
 
 type Kksq struct {
 	Id         int64
+	TaskId     string
 	CourseId   string
 	CourseName string
 	Year       string

@@ -78,5 +78,6 @@ func init() {
 	beego.Router("/v1/xzz/getdata", &controllers.XzzglController{}, "*:GetData")
 	beego.Router("/v1/xzz/edit_action", &controllers.XzzglController{}, "post:EditAction")
 	beego.Router("/v1/xzz/del", &controllers.XzzglController{}, "post:Del")
+	beego.Router("/v1/xzztl/enter", &controllers.XzzglController{}, "post:XzztlAdd")
 
 }

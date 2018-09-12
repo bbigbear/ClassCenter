@@ -2,7 +2,7 @@ package main
 
 import (
 	"ClassCenter/models"
-	_ "classCenter/routers"
+	_ "ClassCenter/routers"
 	"fmt"
 
 	"github.com/astaxie/beego"
@@ -44,7 +44,6 @@ func DBConnection() {
 	if err != nil {
 		fmt.Println("MaxIdleConns is nil", err)
 	}
-
 	sql := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", user, passwd, host, db)
 	orm.RegisterDataBase("default", "mysql", sql, maxIdleConns, maxOpenConns)
 }
@@ -53,5 +52,5 @@ func RegisterModel() {
 		new(models.Jxrw), new(models.Jxrw_teacher_allot),
 		new(models.XkSetting), new(models.Xkrw), new(models.Kksq),
 		new(models.Kbsz), new(models.KbszSetting), new(models.PkSetting),
-		new(models.Case), new(models.TeachGroup), new(models.Jbjh), new(models.Xzz))
+		new(models.Case), new(models.TeachGroup), new(models.Jbjh), new(models.Xzz), new(models.Xzztl))
 }

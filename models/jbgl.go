@@ -12,5 +12,6 @@ type Jbjh struct {
 	Master      string
 	Participant string
 	Status      string
+	FilePath    string
 	CreateTime  time.Time
 }
