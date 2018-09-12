@@ -17,6 +17,7 @@ type XzzglController struct {
 
 func (this *XzzglController) AddAction() {
 	fmt.Println("add case")
+	var member string
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -34,9 +35,16 @@ func (this *XzzglController) AddAction() {
 	fmt.Println("当前访问用户为:", name)
 	o := orm.NewOrm()
 	list := make(map[string]interface{})
+	//获取成员
+	var group models.Group
+	json.Unmarshal(this.Ctx.Input.RequestBody, &group)
+	fmt.Println("group:", &group)
+	l := len(group.GroupMember)
+	for i := 0; i < l; i++ {
+		member += group.GroupMember[i] + ","
+	}
 	var xzz models.Xzz
 	json.Unmarshal(this.Ctx.Input.RequestBody, &xzz)
-
 	fmt.Println("xzz_info:", &xzz)
 	//time
 	nowtime, err := time.Parse("2006-01-02 15:04:05", time.Now().Format("2006-01-02 15:04:05"))
@@ -44,6 +52,8 @@ func (this *XzzglController) AddAction() {
 		fmt.Println("新建失败")
 	}
 	xzz.CreateTime = nowtime
+	//member
+	xzz.GroupMember = member
 	//insert
 	_, err1 := o.Insert(&xzz)
 	if err1 != nil {
@@ -116,6 +126,7 @@ func (this *XzzglController) GetData() {
 
 func (this *XzzglController) EditAction() {
 	fmt.Println("edit action")
+	var member string
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -134,6 +145,15 @@ func (this *XzzglController) EditAction() {
 
 	o := orm.NewOrm()
 	var xzz models.Xzz
+	//获取成员
+	var group models.Group
+	json.Unmarshal(this.Ctx.Input.RequestBody, &group)
+	fmt.Println("group:", &group)
+	l := len(group.GroupMember)
+	for i := 0; i < l; i++ {
+		member += group.GroupMember[i] + ","
+	}
+	xzz.GroupMember = member
 	json.Unmarshal(this.Ctx.Input.RequestBody, &xzz)
 	fmt.Println("xzz_info:", &xzz)
 	//updata xzz db

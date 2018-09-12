@@ -79,5 +79,9 @@ func init() {
 	beego.Router("/v1/xzz/edit_action", &controllers.XzzglController{}, "post:EditAction")
 	beego.Router("/v1/xzz/del", &controllers.XzzglController{}, "post:Del")
 	beego.Router("/v1/xzztl/enter", &controllers.XzzglController{}, "post:XzztlAdd")
-
+	//jstk
+	beego.Router("/v1/jstk/ryap/add_action", &controllers.JstkController{}, "post:RyapAdd")
+	beego.Router("/v1/jstk/ryap/allot_teacher", &controllers.JstkController{}, "post:RyapAddPeople")
+	beego.Router("/v1/jstk/ryap/getdata", &controllers.JstkController{}, "*:RyapGetData")
+	beego.Router("/v1/jstk/ryap/del", &controllers.JstkController{}, "post:RyapDel")
 }

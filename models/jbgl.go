@@ -15,3 +15,7 @@ type Jbjh struct {
 	FilePath    string
 	CreateTime  time.Time
 }
+
+type Part struct {
+	Participant []string
+}

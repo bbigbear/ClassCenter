@@ -48,8 +48,9 @@ func (this *JstkController) RyapAdd() {
 	return
 }
 
-func (this *JsbkController) RyapAddPeople() {
+func (this *JstkController) RyapAddPeople() {
 	fmt.Println("add staff")
+	var teacher string
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -66,20 +67,23 @@ func (this *JsbkController) RyapAddPeople() {
 	}
 	fmt.Println("当前访问用户为:", name)
 
-	var jstk_info models.Jstk
-	json.Unmarshal(this.Ctx.Input.RequestBody, &jstk_info)
-	fmt.Println("jstk_info:", &jstk_info)
-	id := jstk_info.Id
-	staff := jstk_info.Staffing
-	if id == 0 || staff == "" {
+	var staff_info models.Staff
+	json.Unmarshal(this.Ctx.Input.RequestBody, &staff_info)
+	fmt.Println("staff:", &staff_info)
+	id := staff_info.Id
+	//teacher
+	l := len(staff_info.Staffing)
+	for i := 0; i < l; i++ {
+		teacher += staff_info.Staffing[i] + ","
+	}
+	if id == 0 || l == 0 {
 		this.ajaxMsg("更新失败,id或者staff不能为空", MSG_ERR_Param)
 	}
-
 	o := orm.NewOrm()
 	jstk := new(models.Jstk)
 	//updata status db
 	num, err := o.QueryTable(jstk).Filter("Id", id).Update(orm.Params{
-		"Staffing": staff,
+		"Staffing": teacher,
 	})
 	if err != nil {
 		fmt.Println("add staff err", err.Error())
@@ -112,10 +116,10 @@ func (this *JstkController) RyapGetData() {
 	jstk := new(models.Jstk)
 	query := o.QueryTable(jstk)
 	filters := make([]interface{}, 0)
-	//OrderName
-	orderName := this.Input().Get("orderName")
-	if orderName != "" {
-		filters = append(filters, "OrderName", orderName)
+	//processName
+	processName := this.Input().Get("processName")
+	if processName != "" {
+		filters = append(filters, "ProcessName", processName)
 	}
 
 	if len(filters) > 0 {

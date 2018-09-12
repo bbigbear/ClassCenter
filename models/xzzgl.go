@@ -20,3 +20,7 @@ type Xzztl struct {
 	Content    string
 	CreateTime time.Time
 }
+
+type Group struct {
+	GroupMember []string
+}

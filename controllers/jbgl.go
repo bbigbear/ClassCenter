@@ -17,6 +17,7 @@ type JbglController struct {
 
 func (this *JbglController) AddAction() {
 	fmt.Println("add case")
+	var p string
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -36,8 +37,17 @@ func (this *JbglController) AddAction() {
 	if err != nil {
 		fmt.Println("新建失败")
 	}
+	//canbeiren
+	var part models.Part
+	json.Unmarshal(this.Ctx.Input.RequestBody, &part)
+	fmt.Println("part:", &part)
+	l := len(part.Participant)
+	for i := 0; i < l; i++ {
+		p += part.Participant[i] + ","
+	}
 	jbjh.CreateTime = nowtime
 	jbjh.Status = "已创建 待发起"
+	jbjh.Participant = p
 	//insert
 	_, err1 := o.Insert(&jbjh)
 	if err1 != nil {
@@ -63,7 +73,7 @@ func (this *JbglController) GetData() {
 	query := o.QueryTable(jbjh)
 
 	//标题
-	title := this.Input().Get("Title")
+	title := this.Input().Get("title")
 	if title != "" {
 		query = query.Filter("Title", title)
 	}
@@ -127,6 +137,7 @@ func (this *JbglController) GetData() {
 
 func (this *JbglController) EditAction() {
 	fmt.Println("edit action")
+	var p string
 	//获取token
 	var token models.Token
 	json.Unmarshal(this.Ctx.Input.RequestBody, &token)
@@ -140,6 +151,15 @@ func (this *JbglController) EditAction() {
 	var jbjh models.Jbjh
 	json.Unmarshal(this.Ctx.Input.RequestBody, &jbjh)
 	fmt.Println("jbjh_info:", &jbjh)
+	//canbeiren
+	var part models.Part
+	json.Unmarshal(this.Ctx.Input.RequestBody, &part)
+	fmt.Println("part:", &part)
+	l := len(part.Participant)
+	for i := 0; i < l; i++ {
+		p += part.Participant[i] + ","
+	}
+	jbjh.Participant = p
 	//updata jxjh db
 	_, err1 := o.Update(&jbjh)
 	if err1 != nil {

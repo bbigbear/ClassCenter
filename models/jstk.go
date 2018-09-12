@@ -28,3 +28,8 @@ type Tksq struct {
 	ChangeNum     int
 	Status        string
 }
+
+type Staff struct {
+	Id       int64
+	Staffing []string
+}
